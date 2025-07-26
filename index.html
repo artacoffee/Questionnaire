@@ -1,519 +1,2153 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>فرم‌های نظرسنجی</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Inter Font (or any suitable Persian/Arabic font if preferred, e.g., Vazirmatn) -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
     <style>
-        body {
-            font-family: 'Inter', sans-serif; /* You might want to use a Persian-friendly font like Vazirmatn: 'Vazirmatn', sans-serif; */
-            background-color: #f0f2f5;
-        }
-        .likert-option {
-            cursor: pointer;
-            transition: all 0.2s ease-in-out;
-        }
-        .likert-option.selected {
-            background-color: #3b82f6; /* Tailwind blue-500 */
-            color: white;
-            border-color: #3b82f6;
-        }
-        .likert-option:hover:not(.selected) {
-            background-color: #e0e7ff; /* Tailwind indigo-100 */
-        }
-        /* Custom Modal Styles */
-        .modal {
-            display: none; /* Hidden by default */
-            position: fixed; /* Stay in place */
-            z-index: 1000; /* Sit on top */
-            left: 0;
-            top: 0;
-            width: 100%; /* Full width */
-            height: 100%; /* Full height */
-            overflow: auto; /* Enable scroll if needed */
-            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-            display: flex; /* Use flex for centering */
-            align-items: center;
-            justify-content: center;
-        }
-        .modal-content {
-            background-color: #fefefe;
-            margin: auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 90%; /* Responsive width */
-            max-width: 500px;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            position: relative; /* For close button positioning */
-        }
-        .close-button {
-            color: #aaa;
-            position: absolute; /* Position relative to modal-content */
-            top: 10px;
-            left: 10px; /* Changed from right to left for RTL */
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        .close-button:hover,
-        .close-button:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
-        }
-        /* Hide modal by default */
-        #myModal {
-            display: none;
-        }
+      body {
+        font-family: "Inter", sans-serif; /* You might want to use a Persian-friendly font like Vazirmatn: 'Vazirmatn', sans-serif; */
+        background-color: #f0f2f5;
+      }
+      .likert-option {
+        cursor: pointer;
+        transition: all 0.2s ease-in-out;
+      }
+      .likert-option.selected {
+        background-color: #3b82f6; /* Tailwind blue-500 */
+        color: white;
+        border-color: #3b82f6;
+      }
+      .likert-option:hover:not(.selected) {
+        background-color: #e0e7ff; /* Tailwind indigo-100 */
+      }
+      /* Custom Modal Styles */
+      .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 1000; /* Sit on top */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+        display: flex; /* Use flex for centering */
+        align-items: center;
+        justify-content: center;
+      }
+      .modal-content {
+        background-color: #fefefe;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 90%; /* Responsive width */
+        max-width: 500px;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        position: relative; /* For close button positioning */
+      }
+      .close-button {
+        color: #aaa;
+        position: absolute; /* Position relative to modal-content */
+        top: 10px;
+        left: 10px; /* Changed from right to left for RTL */
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+      }
+      .close-button:hover,
+      .close-button:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+      }
+      /* Hide modal by default */
+      #myModal {
+        display: none;
+      }
     </style>
-</head>
-<body class="p-4">
+  </head>
+  <body class="p-4">
     <div class="container mx-auto p-6 bg-white rounded-lg shadow-xl my-8">
-        <h1 class="text-3xl font-bold text-center text-gray-800 mb-8">فرم‌های نظرسنجی</h1>
+      <h1 class="text-3xl font-bold text-center text-gray-800 mb-8">
+        فرم‌های نظرسنجی
+      </h1>
 
-        <!-- Demographic Information Form -->
-        <div class="mb-12 p-6 bg-blue-50 rounded-lg shadow-inner">
-            <h2 class="text-2xl font-semibold text-blue-800 mb-6 text-center">اطلاعات دموگرافیک</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                <div>
-                    <label for="age" class="block text-gray-700 text-lg font-medium mb-2">سن:</label>
-                    <input type="number" id="age" min="1" max="120" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-lg" placeholder="سن خود را وارد کنید">
-                </div>
-                <div>
-                    <label for="gender" class="block text-gray-700 text-lg font-medium mb-2">جنسیت:</label>
-                    <select id="gender" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-lg">
-                        <option value="">انتخاب کنید</option>
-                        <option value="male">مرد</option>
-                        <option value="female">زن</option>
-                        <option value="other">دیگر</option>
-                    </select>
-                </div>
-            </div>
-            <div class="mb-6">
-                <label for="education" class="block text-gray-700 text-lg font-medium mb-2">تحصیلات:</label>
-                <input type="text" id="education" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-lg" placeholder="میزان تحصیلات خود را وارد کنید">
-            </div>
-            <div class="mb-6">
-                <label for="occupation" class="block text-gray-700 text-lg font-medium mb-2">شغل:</label>
-                <input type="text" id="occupation" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-lg" placeholder="شغل خود را وارد کنید">
-            </div>
+      <!-- Demographic Information Form -->
+      <div class="mb-12 p-6 bg-blue-50 rounded-lg shadow-inner">
+        <h2 class="text-2xl font-semibold text-blue-800 mb-6 text-center">
+          اطلاعات دموگرافیک
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+          <div>
+            <label
+              for="age"
+              class="block text-gray-700 text-lg font-medium mb-2"
+              >سن:</label
+            >
+            <input
+              type="number"
+              id="age"
+              min="1"
+              max="120"
+              class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-lg"
+              placeholder="سن خود را وارد کنید"
+            />
+          </div>
+          <div>
+            <label
+              for="gender"
+              class="block text-gray-700 text-lg font-medium mb-2"
+              >جنسیت:</label
+            >
+            <select
+              id="gender"
+              class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-lg"
+            >
+              <option value="">انتخاب کنید</option>
+              <option value="male">مرد</option>
+              <option value="female">زن</option>
+              <option value="other">دیگر</option>
+            </select>
+          </div>
         </div>
+        <div class="mb-6">
+          <label
+            for="education"
+            class="block text-gray-700 text-lg font-medium mb-2"
+            >تحصیلات:</label
+          >
+          <input
+            type="text"
+            id="education"
+            class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-lg"
+            placeholder="میزان تحصیلات خود را وارد کنید"
+          />
+        </div>
+        <div class="mb-6">
+          <label
+            for="occupation"
+            class="block text-gray-700 text-lg font-medium mb-2"
+            >شغل:</label
+          >
+          <input
+            type="text"
+            id="occupation"
+            class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-lg"
+            placeholder="شغل خود را وارد کنید"
+          />
+        </div>
+      </div>
 
-        <!-- MBI Form Section -->
-        <div id="mbi-form-section" class="mb-12 p-6 bg-green-50 rounded-lg shadow-inner">
-            <h2 class="text-2xl font-semibold text-green-800 mb-6 text-center">فرم MBI</h2>
-            <!-- MBI questions will be dynamically inserted here -->
-        </div>
+      <!-- MBI Form Section -->
+      <div
+        id="mbi-form-section"
+        class="mb-12 p-6 bg-green-50 rounded-lg shadow-inner"
+      >
+        <h2 class="text-2xl font-semibold text-green-800 mb-6 text-center">
+          فرم MBI
+        </h2>
+        <!-- MBI questions will be dynamically inserted here -->
+      </div>
 
-        <!-- YSQ Form Section -->
-        <div id="ysq-form-section" class="mb-12 p-6 bg-purple-50 rounded-lg shadow-inner">
-            <h2 class="text-2xl font-semibold text-purple-800 mb-6 text-center">فرم YSQ</h2>
-            <!-- YSQ questions will be dynamically inserted here -->
-        </div>
+      <!-- YSQ Form Section -->
+      <div
+        id="ysq-form-section"
+        class="mb-12 p-6 bg-purple-50 rounded-lg shadow-inner"
+      >
+        <h2 class="text-2xl font-semibold text-purple-800 mb-6 text-center">
+          فرم YSQ
+        </h2>
+        <!-- YSQ questions will be dynamically inserted here -->
+      </div>
 
-        <div class="text-center">
-            <button id="submit-all-forms" class="px-8 py-4 bg-indigo-600 text-white font-bold text-xl rounded-full shadow-lg hover:bg-indigo-700 focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:ring-opacity-50 transition transform hover:scale-105">
-                ارسال همه فرم‌ها
-            </button>
-        </div>
+      <div class="text-center">
+        <button
+          id="submit-all-forms"
+          class="px-8 py-4 bg-indigo-600 text-white font-bold text-xl rounded-full shadow-lg hover:bg-indigo-700 focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:ring-opacity-50 transition transform hover:scale-105"
+        >
+          ارسال همه فرم‌ها
+        </button>
+      </div>
 
-        <!-- Results Section -->
-        <div class="mt-12 p-6 bg-gray-100 rounded-lg shadow-inner">
-            <h2 class="text-2xl font-semibold text-gray-800 mb-6 text-center">نتایج ارسال شده</h2>
-            <p class="text-center text-gray-600 mb-4">
-                شناسه کاربری شما: <span id="user-id" class="font-bold text-blue-700">در حال بارگذاری...</span>
-            </p>
-            <div id="results-display" class="space-y-4">
-                <!-- Results will be dynamically inserted here -->
-                <p class="text-center text-gray-500">هیچ نتیجه‌ای هنوز ارسال نشده است.</p>
-            </div>
+      <!-- Results Section -->
+      <div class="mt-12 p-6 bg-gray-100 rounded-lg shadow-inner">
+        <h2 class="text-2xl font-semibold text-gray-800 mb-6 text-center">
+          نتایج ارسال شده
+        </h2>
+        <p class="text-center text-gray-600 mb-4">
+          شناسه کاربری شما:
+          <span id="user-id" class="font-bold text-blue-700"
+            >در حال بارگذاری...</span
+          >
+        </p>
+        <div id="results-display" class="space-y-4">
+          <!-- Results will be dynamically inserted here -->
+          <p class="text-center text-gray-500">
+            هیچ نتیجه‌ای هنوز ارسال نشده است.
+          </p>
         </div>
+      </div>
     </div>
 
     <!-- Custom Modal for messages -->
     <div id="myModal" class="modal">
-        <div class="modal-content">
-            <span class="close-button" id="closeModalBtn">&times;</span>
-            <p id="modalMessage" class="text-lg font-medium text-gray-800"></p>
-        </div>
+      <div class="modal-content">
+        <span class="close-button" id="closeModalBtn">&times;</span>
+        <p id="modalMessage" class="text-lg font-medium text-gray-800"></p>
+      </div>
     </div>
 
     <script type="module">
-        // Firebase imports
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc, collection, query, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+      // Firebase imports
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+      import {
+        getAuth,
+        signInAnonymously,
+        signInWithCustomToken,
+        onAuthStateChanged
+      } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+      import {
+        getFirestore,
+        doc,
+        setDoc,
+        collection,
+        query,
+        onSnapshot,
+        serverTimestamp
+      } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // Global variables for Firebase config and app ID
-        // These variables are provided by the Canvas environment.
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-        const firebaseConfig = {
-            apiKey: "AIzaSyC0uJzxWrejhRrMHKc-HqDEXDUcjpF0w6Q",
-            authDomain: "questionnaire-4827b.firebaseapp.com",
-            projectId: "questionnaire-4827b",
-            storageBucket: "questionnaire-4827b.firebasestorage.app",
-            messagingSenderId: "431810930724",
-            appId: "1:431810930724:web:9fae53c798bd9b2dd050b1",
-            measurementId: "G-HCG9K9HFNG"
-            };
+      // Global variables for Firebase config and app ID
+      // These variables are provided by the Canvas environment.
+      // Your actual Firebase configuration from your project
 
-        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+      const firebaseConfig = {
+        apiKey: "AIzaSyC0uJzxWrejhRrMHKc-HqDEXDUcjpF0w6Q",
+        authDomain: "questionnaire-4827b.firebaseapp.com",
+        projectId: "questionnaire-4827b",
+        storageBucket: "questionnaire-4827b.firebasestorage.app",
+        messagingSenderId: "431810930724",
+        appId: "1:431810930724:web:9fae53c798bd9b2dd050b1",
+        measurementId: "G-HCG9K9HFNG" // This line is optional if you don't use Analytics
+      };
 
-        let app, db, auth, userId;
+      // Use your Firebase projectId as the appId for the Firestore collection path.
+      // This is crucial for the Firestore security rules to match correctly.
+      const appId = firebaseConfig.projectId;
 
-        // Function to show custom modal messages
-        function showModal(message) {
-            const modal = document.getElementById('myModal');
-            const modalMessage = document.getElementById('modalMessage');
-            modalMessage.textContent = message;
-            modal.style.display = 'flex'; // Use flex to center content
+      // initialAuthToken is not used when deploying to GitHub Pages, so set it to null.
+      const initialAuthToken = null;
+      let app, db, auth, userId;
+
+      // Function to show custom modal messages
+      function showModal(message) {
+        const modal = document.getElementById("myModal");
+        const modalMessage = document.getElementById("modalMessage");
+        modalMessage.textContent = message;
+        modal.style.display = "flex"; // Use flex to center content
+      }
+
+      // Function to close custom modal
+      function closeModal() {
+        const modal = document.getElementById("myModal");
+        modal.style.display = "none";
+      }
+
+      // Event listeners for modal close button and outside click
+      document
+        .getElementById("closeModalBtn")
+        .addEventListener("click", closeModal);
+      window.addEventListener("click", event => {
+        const modal = document.getElementById("myModal");
+        if (event.target == modal) {
+          closeModal();
         }
+      });
 
-        // Function to close custom modal
-        function closeModal() {
-            const modal = document.getElementById('myModal');
-            modal.style.display = 'none';
-        }
+      // Initialize Firebase and authenticate the user
+      async function initializeFirebase() {
+        try {
+          app = initializeApp(firebaseConfig);
+          db = getFirestore(app);
+          auth = getAuth(app);
 
-        // Event listeners for modal close button and outside click
-        document.getElementById('closeModalBtn').addEventListener('click', closeModal);
-        window.addEventListener('click', (event) => {
-            const modal = document.getElementById('myModal');
-            if (event.target == modal) {
-                closeModal();
+          // Listen for authentication state changes
+          onAuthStateChanged(auth, async user => {
+            if (user) {
+              userId = user.uid;
+              document.getElementById("user-id").textContent = userId;
+              console.log("User authenticated:", userId);
+              // Once authenticated, set up the real-time listener for results
+              setupResultsListener();
+            } else {
+              // If no user is authenticated, try to sign in with custom token or anonymously
+              if (initialAuthToken) {
+                await signInWithCustomToken(auth, initialAuthToken);
+              } else {
+                await signInAnonymously(auth);
+              }
             }
-        });
-
-        // Initialize Firebase and authenticate the user
-        async function initializeFirebase() {
-            try {
-                app = initializeApp(firebaseConfig);
-                db = getFirestore(app);
-                auth = getAuth(app);
-
-                // Listen for authentication state changes
-                onAuthStateChanged(auth, async (user) => {
-                    if (user) {
-                        userId = user.uid;
-                        document.getElementById('user-id').textContent = userId;
-                        console.log('User authenticated:', userId);
-                        // Once authenticated, set up the real-time listener for results
-                        setupResultsListener();
-                    } else {
-                        // If no user is authenticated, try to sign in with custom token or anonymously
-                        if (initialAuthToken) {
-                            await signInWithCustomToken(auth, initialAuthToken);
-                        } else {
-                            await signInAnonymously(auth);
-                        }
-                    }
-                });
-            } catch (error) {
-                console.error("Error initializing Firebase or authenticating:", error);
-                showModal("خطا در بارگذاری سرویس‌ها. لطفاً صفحه را رفرش کنید.");
-            }
+          });
+        } catch (error) {
+          console.error(
+            "Error initializing Firebase or authenticating:",
+            error
+          );
+          showModal("خطا در بارگذاری سرویس‌ها. لطفاً صفحه را رفرش کنید.");
         }
+      }
 
-        // Data for the MBI questions (provided by the user)
-        const mbiQuestions = [
-            { "id": "MBI_1", "question": "از کارم احساس خستگی می‌کنم.", "type": "likert", "options": ["هیچ‌وقت", "به ندرت", "گاهی", "اغلب", "بسیار اغلب", "هر روز"], "scale": [0, 1, 2, 3, 4, 5], "category": "خستگی هیجانی" },
-            { "id": "MBI_2", "question": "در پایان یک روز کاری احساس می‌کنم کاملاً خسته‌ام.", "type": "likert", "options": ["هیچ‌وقت", "به ندرت", "گاهی", "اغلب", "بسیار اغلب", "هر روز"], "scale": [0, 1, 2, 3, 4, 5], "category": "خستگی هیجانی" },
-            { "id": "MBI_3", "question": "در آغاز یک روز کاری احساس می‌کنم نمی‌توانم بیشتر از این کار کنم.", "type": "likert", "options": ["هیچ‌وقت", "به ندرت", "گاهی", "اغلب", "بسیار اغلب", "هر روز"], "scale": [0, 1, 2, 3, 4, 5], "category": "خستگی هیجانی" },
-            { "id": "MBI_4", "question": "کار کردن با مردم برایم واقعاً دشوار است.", "type": "likert", "options": ["هیچ‌وقت", "به ندرت", "گاهی", "اغلب", "بسیار اغلب", "هر روز"], "scale": [0, 1, 2, 3, 4, 5], "category": "خستگی هیجانی" },
-            { "id": "MBI_5", "question": "کارم مرا تحت فشار روانی زیادی قرار می‌دهد.", "type": "likert", "options": ["هیچ‌وقت", "به ندرت", "گاهی", "اغلب", "بسیار اغلب", "هر روز"], "scale": [0, 1, 2, 3, 4, 5], "category": "خستگی هیجانی" },
-            { "id": "MBI_6", "question": "احساس می‌کنم از نظر احساسی دچار فرسودگی شده‌ام.", "type": "likert", "options": ["هیچ‌وقت", "به ندرت", "گاهی", "اغلب", "بسیار اغلب", "هر روز"], "scale": [0, 1, 2, 3, 4, 5], "category": "خستگی هیجانی" },
-            { "id": "MBI_7", "question": "احساس می‌کنم که این کار باعث خستگی من می‌شود.", "type": "likert", "options": ["هیچ‌وقت", "به ندرت", "گاهی", "اغلب", "بسیار اغلب", "هر روز"], "scale": [0, 1, 2, 3, 4, 5], "category": "خستگی هیجانی" },
-            { "id": "MBI_8", "question": "وقتی از سر کار برمی‌گردم، احساس می‌کنم تمام انرژی‌ام را از دست داده‌ام.", "type": "likert", "options": ["هیچ‌وقت", "به ندرت", "گاهی", "اغلب", "بسیار اغلب", "هر روز"], "scale": [0, 1, 2, 3, 4, 5], "category": "خستگی هیجانی" },
-            { "id": "MBI_9", "question": "در طول روز کاری احساس می‌کنم خسته و درمانده‌ام.", "type": "likert", "options": ["هیچ‌وقت", "به ندرت", "گاهی", "اغلب", "بسیار اغلب", "هر روز"], "scale": [0, 1, 2, 3, 4, 5], "category": "خستگی هیجانی" },
-            { "id": "MBI_10", "question": "با برخی افراد تحت مراقبتم به‌طور غیرشخصی رفتار می‌کنم، مثل اینکه آن‌ها اشیا هستند.", "type": "likert", "options": ["هیچ‌وقت", "به ندرت", "گاهی", "اغلب", "بسیار اغلب", "هر روز"], "scale": [0, 1, 2, 3, 4, 5], "category": "مسخ شخصیت" },
-            { "id": "MBI_11", "question": "از طریق کارم با دیگران بی‌تفاوت برخورد می‌کنم.", "type": "likert", "options": ["هیچ‌وقت", "به ندرت", "گاهی", "اغلب", "بسیار اغلب", "هر روز"], "scale": [0, 1, 2, 3, 4, 5], "category": "مسخ شخصیت" },
-            { "id": "MBI_12", "question": "من واقعاً نگران برخی از بیماران نیستم.", "type": "likert", "options": ["هیچ‌وقت", "به ندرت", "گاهی", "اغلب", "بسیار اغلب", "هر روز"], "scale": [0, 1, 2, 3, 4, 5], "category": "مسخ شخصیت" },
-            { "id": "MBI_13", "question": "کار کردن با مردم باعث می‌شود احساس کنم آن‌ها مشکلاتی برای من ایجاد می‌کنند.", "type": "likert", "options": ["هیچ‌وقت", "به ندرت", "گاهی", "اغلب", "بسیار اغلب", "هر روز"], "scale": [0, 1, 2, 3, 4, 5], "category": "مسخ شخصیت" },
-            { "id": "MBI_14", "question": "احساس می‌کنم بیماران یا مراجعانم باعث خستگی‌ام می‌شوند.", "type": "likert", "options": ["هیچ‌وقت", "به ندرت", "گاهی", "اغلب", "بسیار اغلب", "هر روز"], "scale": [0, 1, 2, 3, 4, 5], "category": "مسخ شخصیت" },
-            { "id": "MBI_15", "question": "می‌توانم به راحتی در موقعیت‌های کاری دیگران را درک کنم.", "type": "likert", "options": ["هیچ‌وقت", "به ندرت", "گاهی", "اغلب", "بسیار اغلب", "هر روز"], "scale": [0, 1, 2, 3, 4, 5], "category": "احساس کاهش کارایی شخصی" },
-            { "id": "MBI_16", "question": "با موفقیت مشکلات بیماران یا مراجعانم را حل می‌کنم.", "type": "likert", "options": ["هیچ‌وقت", "به ندرت", "گاهی", "اغلب", "بسیار اغلب", "هر روز"], "scale": [0, 1, 2, 3, 4, 5], "category": "احساس کاهش کارایی شخصی" },
-            { "id": "MBI_17", "question": "احساس می‌کنم با کارم به طور مثبتی بر زندگی افراد تأثیر می‌گذارم.", "type": "likert", "options": ["هیچ‌وقت", "به ندرت", "گاهی", "اغلب", "بسیار اغلب", "هر روز"], "scale": [0, 1, 2, 3, 4, 5], "category": "احساس کاهش کارایی شخصی" },
-            { "id": "MBI_18", "question": "احساس می‌کنم که انرژی لازم برای انجام کارم را دارم.", "type": "likert", "options": ["هیچ‌وقت", "به ندرت", "گاهی", "اغلب", "بسیار اغلب", "هر روز"], "scale": [0, 1, 2, 3, 4, 5], "category": "احساس کاهش کارایی شخصی" },
-            { "id": "MBI_19", "question": "در برخورد با مشکلات عاطفی در کارم به خوبی عمل می‌کنم.", "type": "likert", "options": ["هیچ‌وقت", "به ندرت", "گاهی", "اغلب", "بسیار اغلب", "هر روز"], "scale": [0, 1, 2, 3, 4, 5], "category": "احساس کاهش کارایی شخصی" },
-            { "id": "MBI_20", "question": "در ارتباط با مراجعان یا بیماران، احساس می‌کنم کار مؤثری انجام می‌دهم.", "type": "likert", "options": ["هیچ‌وقت", "به ندرت", "گاهی", "اغلب", "بسیار اغلب", "هر روز"], "scale": [0, 1, 2, 3, 4, 5], "category": "احساس کاهش کارایی شخصی" },
-            { "id": "MBI_21", "question": "در کار با دیگران به آسانی احساس آرامش و آسودگی می‌کنم.", "type": "likert", "options": ["هیچ‌وقت", "به ندرت", "گاهی", "اغلب", "بسیار اغلب", "هر روز"], "scale": [0, 1, 2, 3, 4, 5], "category": "احساس کاهش کارایی شخصی" },
-            { "id": "MBI_22", "question": "در کار با افراد تحت مراقبتم احساس مؤثر بودن می‌کنم.", "type": "likert", "options": ["هیچ‌وقت", "به ندرت", "گاهی", "اغلب", "بسیار اغلب", "هر روز"], "scale": [0, 1, 2, 3, 4, 5], "category": "احساس کاهش کارایی شخصی" }
-        ];
+      // Data for the MBI questions (provided by the user)
+      const mbiQuestions = [
+        {
+          id: "MBI_1",
+          question: "از کارم احساس خستگی می‌کنم.",
+          type: "likert",
+          options: [
+            "هیچ‌وقت",
+            "به ندرت",
+            "گاهی",
+            "اغلب",
+            "بسیار اغلب",
+            "هر روز"
+          ],
+          scale: [0, 1, 2, 3, 4, 5],
+          category: "خستگی هیجانی"
+        },
+        {
+          id: "MBI_2",
+          question: "در پایان یک روز کاری احساس می‌کنم کاملاً خسته‌ام.",
+          type: "likert",
+          options: [
+            "هیچ‌وقت",
+            "به ندرت",
+            "گاهی",
+            "اغلب",
+            "بسیار اغلب",
+            "هر روز"
+          ],
+          scale: [0, 1, 2, 3, 4, 5],
+          category: "خستگی هیجانی"
+        },
+        {
+          id: "MBI_3",
+          question:
+            "در آغاز یک روز کاری احساس می‌کنم نمی‌توانم بیشتر از این کار کنم.",
+          type: "likert",
+          options: [
+            "هیچ‌وقت",
+            "به ندرت",
+            "گاهی",
+            "اغلب",
+            "بسیار اغلب",
+            "هر روز"
+          ],
+          scale: [0, 1, 2, 3, 4, 5],
+          category: "خستگی هیجانی"
+        },
+        {
+          id: "MBI_4",
+          question: "کار کردن با مردم برایم واقعاً دشوار است.",
+          type: "likert",
+          options: [
+            "هیچ‌وقت",
+            "به ندرت",
+            "گاهی",
+            "اغلب",
+            "بسیار اغلب",
+            "هر روز"
+          ],
+          scale: [0, 1, 2, 3, 4, 5],
+          category: "خستگی هیجانی"
+        },
+        {
+          id: "MBI_5",
+          question: "کارم مرا تحت فشار روانی زیادی قرار می‌دهد.",
+          type: "likert",
+          options: [
+            "هیچ‌وقت",
+            "به ندرت",
+            "گاهی",
+            "اغلب",
+            "بسیار اغلب",
+            "هر روز"
+          ],
+          scale: [0, 1, 2, 3, 4, 5],
+          category: "خستگی هیجانی"
+        },
+        {
+          id: "MBI_6",
+          question: "احساس می‌کنم از نظر احساسی دچار فرسودگی شده‌ام.",
+          type: "likert",
+          options: [
+            "هیچ‌وقت",
+            "به ندرت",
+            "گاهی",
+            "اغلب",
+            "بسیار اغلب",
+            "هر روز"
+          ],
+          scale: [0, 1, 2, 3, 4, 5],
+          category: "خستگی هیجانی"
+        },
+        {
+          id: "MBI_7",
+          question: "احساس می‌کنم که این کار باعث خستگی من می‌شود.",
+          type: "likert",
+          options: [
+            "هیچ‌وقت",
+            "به ندرت",
+            "گاهی",
+            "اغلب",
+            "بسیار اغلب",
+            "هر روز"
+          ],
+          scale: [0, 1, 2, 3, 4, 5],
+          category: "خستگی هیجانی"
+        },
+        {
+          id: "MBI_8",
+          question:
+            "وقتی از سر کار برمی‌گردم، احساس می‌کنم تمام انرژی‌ام را از دست داده‌ام.",
+          type: "likert",
+          options: [
+            "هیچ‌وقت",
+            "به ندرت",
+            "گاهی",
+            "اغلب",
+            "بسیار اغلب",
+            "هر روز"
+          ],
+          scale: [0, 1, 2, 3, 4, 5],
+          category: "خستگی هیجانی"
+        },
+        {
+          id: "MBI_9",
+          question: "در طول روز کاری احساس می‌کنم خسته و درمانده‌ام.",
+          type: "likert",
+          options: [
+            "هیچ‌وقت",
+            "به ندرت",
+            "گاهی",
+            "اغلب",
+            "بسیار اغلب",
+            "هر روز"
+          ],
+          scale: [0, 1, 2, 3, 4, 5],
+          category: "خستگی هیجانی"
+        },
+        {
+          id: "MBI_10",
+          question:
+            "با برخی افراد تحت مراقبتم به‌طور غیرشخصی رفتار می‌کنم، مثل اینکه آن‌ها اشیا هستند.",
+          type: "likert",
+          options: [
+            "هیچ‌وقت",
+            "به ندرت",
+            "گاهی",
+            "اغلب",
+            "بسیار اغلب",
+            "هر روز"
+          ],
+          scale: [0, 1, 2, 3, 4, 5],
+          category: "مسخ شخصیت"
+        },
+        {
+          id: "MBI_11",
+          question: "از طریق کارم با دیگران بی‌تفاوت برخورد می‌کنم.",
+          type: "likert",
+          options: [
+            "هیچ‌وقت",
+            "به ندرت",
+            "گاهی",
+            "اغلب",
+            "بسیار اغلب",
+            "هر روز"
+          ],
+          scale: [0, 1, 2, 3, 4, 5],
+          category: "مسخ شخصیت"
+        },
+        {
+          id: "MBI_12",
+          question: "من واقعاً نگران برخی از بیماران نیستم.",
+          type: "likert",
+          options: [
+            "هیچ‌وقت",
+            "به ندرت",
+            "گاهی",
+            "اغلب",
+            "بسیار اغلب",
+            "هر روز"
+          ],
+          scale: [0, 1, 2, 3, 4, 5],
+          category: "مسخ شخصیت"
+        },
+        {
+          id: "MBI_13",
+          question:
+            "کار کردن با مردم باعث می‌شود احساس کنم آن‌ها مشکلاتی برای من ایجاد می‌کنند.",
+          type: "likert",
+          options: [
+            "هیچ‌وقت",
+            "به ندرت",
+            "گاهی",
+            "اغلب",
+            "بسیار اغلب",
+            "هر روز"
+          ],
+          scale: [0, 1, 2, 3, 4, 5],
+          category: "مسخ شخصیت"
+        },
+        {
+          id: "MBI_14",
+          question: "احساس می‌کنم بیماران یا مراجعانم باعث خستگی‌ام می‌شوند.",
+          type: "likert",
+          options: [
+            "هیچ‌وقت",
+            "به ندرت",
+            "گاهی",
+            "اغلب",
+            "بسیار اغلب",
+            "هر روز"
+          ],
+          scale: [0, 1, 2, 3, 4, 5],
+          category: "مسخ شخصیت"
+        },
+        {
+          id: "MBI_15",
+          question: "می‌توانم به راحتی در موقعیت‌های کاری دیگران را درک کنم.",
+          type: "likert",
+          options: [
+            "هیچ‌وقت",
+            "به ندرت",
+            "گاهی",
+            "اغلب",
+            "بسیار اغلب",
+            "هر روز"
+          ],
+          scale: [0, 1, 2, 3, 4, 5],
+          category: "احساس کاهش کارایی شخصی"
+        },
+        {
+          id: "MBI_16",
+          question: "با موفقیت مشکلات بیماران یا مراجعانم را حل می‌کنم.",
+          type: "likert",
+          options: [
+            "هیچ‌وقت",
+            "به ندرت",
+            "گاهی",
+            "اغلب",
+            "بسیار اغلب",
+            "هر روز"
+          ],
+          scale: [0, 1, 2, 3, 4, 5],
+          category: "احساس کاهش کارایی شخصی"
+        },
+        {
+          id: "MBI_17",
+          question:
+            "احساس می‌کنم با کارم به طور مثبتی بر زندگی افراد تأثیر می‌گذارم.",
+          type: "likert",
+          options: [
+            "هیچ‌وقت",
+            "به ندرت",
+            "گاهی",
+            "اغلب",
+            "بسیار اغلب",
+            "هر روز"
+          ],
+          scale: [0, 1, 2, 3, 4, 5],
+          category: "احساس کاهش کارایی شخصی"
+        },
+        {
+          id: "MBI_18",
+          question: "احساس می‌کنم که انرژی لازم برای انجام کارم را دارم.",
+          type: "likert",
+          options: [
+            "هیچ‌وقت",
+            "به ندرت",
+            "گاهی",
+            "اغلب",
+            "بسیار اغلب",
+            "هر روز"
+          ],
+          scale: [0, 1, 2, 3, 4, 5],
+          category: "احساس کاهش کارایی شخصی"
+        },
+        {
+          id: "MBI_19",
+          question: "در برخورد با مشکلات عاطفی در کارم به خوبی عمل می‌کنم.",
+          type: "likert",
+          options: [
+            "هیچ‌وقت",
+            "به ندرت",
+            "گاهی",
+            "اغلب",
+            "بسیار اغلب",
+            "هر روز"
+          ],
+          scale: [0, 1, 2, 3, 4, 5],
+          category: "احساس کاهش کارایی شخصی"
+        },
+        {
+          id: "MBI_20",
+          question:
+            "در ارتباط با مراجعان یا بیماران، احساس می‌کنم کار مؤثری انجام می‌دهم.",
+          type: "likert",
+          options: [
+            "هیچ‌وقت",
+            "به ندرت",
+            "گاهی",
+            "اغلب",
+            "بسیار اغلب",
+            "هر روز"
+          ],
+          scale: [0, 1, 2, 3, 4, 5],
+          category: "احساس کاهش کارایی شخصی"
+        },
+        {
+          id: "MBI_21",
+          question: "در کار با دیگران به آسانی احساس آرامش و آسودگی می‌کنم.",
+          type: "likert",
+          options: [
+            "هیچ‌وقت",
+            "به ندرت",
+            "گاهی",
+            "اغلب",
+            "بسیار اغلب",
+            "هر روز"
+          ],
+          scale: [0, 1, 2, 3, 4, 5],
+          category: "احساس کاهش کارایی شخصی"
+        },
+        {
+          id: "MBI_22",
+          question: "در کار با افراد تحت مراقبتم احساس مؤثر بودن می‌کنم.",
+          type: "likert",
+          options: [
+            "هیچ‌وقت",
+            "به ندرت",
+            "گاهی",
+            "اغلب",
+            "بسیار اغلب",
+            "هر روز"
+          ],
+          scale: [0, 1, 2, 3, 4, 5],
+          category: "احساس کاهش کارایی شخصی"
+        }
+      ];
 
-        // Data for the YSQ questions (provided by the user)
-        const ysqQuestions = [
-            { "id": "YSQ_1", "question": "مردم به طور کلی برای من حمایت نخواهند کرد.", "type": "likert", "options": ["کاملاً نادرست", "نادرست", "تا حدی نادرست", "تا حدی درست", "درست", "کاملاً درست"], "scale": [1, 2, 3, 4, 5, 6], "category": "طرحواره_حق_طلبی", "domain": "محدودیت‌های_مختل" },
-            { "id": "YSQ_2", "question": "اکثر اوقات کسی در کنارم نیست که مراقبم باشد، احساساتم را در میان بگذارم یا واقعاً درباره‌ام فکر کند.", "type": "likert", "options": ["کاملاً نادرست", "نادرست", "تا حدی نادرست", "تا حدی درست", "درست", "کاملاً درست"], "scale": [1, 2, 3, 4, 5, 6], "category": "طرحواره_محرومیت_هیجانی", "domain": "جدایی_و_طرد" },
-            { "id": "YSQ_3", "question": "بیشتر وقت‌ها کسی نیست که واقعاً مرا درک کند.", "type": "likert", "options": ["کاملاً نادرست", "نادرست", "تا حدی نادرست", "تا حدی درست", "درست", "کاملاً درست"], "scale": [1, 2, 3, 4, 5, 6], "category": "طرحواره_محرومیت_هیجانی", "domain": "جدایی_و_طرد" },
-            { "id": "YSQ_4", "question": "به ندرت مردم قوی و قابل اعتمادی پیدا کرده‌ام که بتوانم به آن‌ها تکیه کنم و از آن‌ها حمایت بگیرم.", "type": "likert", "options": ["کاملاً نادرست", "نادرست", "تا حدی نادرست", "تا حدی درست", "درست", "کاملاً درست"], "scale": [1, 2, 3, 4, 5, 6], "category": "طرحواره_محرومیت_هیجانی", "domain": "جدایی_و_طرد" },
-            { "id": "YSQ_5", "question": "احساس می‌کنم که کسانی که برایم مهم هستند، مرا ترک خواهند کرد.", "type": "likert", "options": ["کاملاً نادرست", "نادرست", "تا حدی نادرست", "تا حدی درست", "درست", "کاملاً درست"], "scale": [1, 2, 3, 4, 5, 6], "category": "طرحواره_ترک_شدگی", "domain": "جدایی_و_طرد" },
-            { "id": "YSQ_6", "question": "نگران این هستم که افراد نزدیک به من، مرا ترک کنند یا از من دور شوند.", "type": "likert", "options": ["کاملاً نادرست", "نادرست", "تا حدی نادرست", "تا حدی درست", "درست", "کاملاً درست"], "scale": [1, 2, 3, 4, 5, 6], "category": "طرحواره_ترک_شدگی", "domain": "جدایی_و_طرد" },
-            { "id": "YSQ_7", "question": "وقتی احساس می‌کنم کسی که برایم مهم است، در حال دور شدن از من است، کنترل خودم را از دست می‌دهم.", "type": "likert", "options": ["کاملاً نادرست", "نادرست", "تا حدی نادرست", "تا حدی درست", "درست", "کاملاً درست"], "scale": [1, 2, 3, 4, 5, 6], "category": "طرحواره_ترک_شدگی", "domain": "جدایی_و_طرد" },
-            { "id": "YSQ_8", "question": "به خاطر ناتوانی‌هایم در روابط اجتماعی، احساس می‌کنم از دیگران جدا هستم.", "type": "likert", "options": ["کاملاً نادرست", "نادرست", "تا حدی نادرست", "تا حدی درست", "درست", "کاملاً درست"], "scale": [1, 2, 3, 4, 5, 6], "category": "طرحواره_انزوای_اجتماعی", "domain": "جدایی_و_طرد" },
-            { "id": "YSQ_9", "question": "احساس می‌کنم با دیگران ارتباط ندارم.", "type": "likert", "options": ["کاملاً نادرست", "نادرست", "تا حدی نادرست", "تا حدی درست", "درست", "کاملاً درست"], "scale": [1, 2, 3, 4, 5, 6], "category": "طرحواره_انزوای_اجتماعی", "domain": "جدایی_و_طرد" },
-            { "id": "YSQ_10", "question": "همیشه احساس می‌کنم که خارج از گروه قرار دارم.", "type": "likert", "options": ["کاملاً نادرست", "نادرست", "تا حدی نادرست", "تا حدی درست", "درست", "کاملاً درست"], "scale": [1, 2, 3, 4, 5, 6], "category": "طرحواره_انزوای_اجتماعی", "domain": "جدایی_و_طرد" },
-            { "id": "YSQ_11", "question": "خانواده‌ام و من بیش از حد درگیر زندگی و مشکلات یکدیگر هستیم.", "type": "likert", "options": ["کاملاً نادرست", "نادرست", "تا حدی نادرست", "تا حدی درست", "درست", "کاملاً درست"], "scale": [1, 2, 3, 4, 5, 6], "category": "طرحواره_خودکامگی", "domain": "خودگردانی_و_عملکرد_مختل" },
-            { "id": "YSQ_12", "question": "احساس می‌کنم هویت مستقلی ندارم - جدا از والدین یا همسرم.", "type": "likert", "options": ["کاملاً نادرست", "نادرست", "تا حدی نادرست", "تا حدی درست", "درست", "کاملاً درست"], "scale": [1, 2, 3, 4, 5, 6], "category": "طرحواره_خودکامگی", "domain": "خودگردانی_و_عملکرد_مختل" },
-            { "id": "YSQ_13", "question": "احساس می‌کنم که نمی‌توانم بدون کمک زیاد افراد نزدیک به خودم، زندگی روزمره‌ام را بگذرانم.", "type": "likert", "options": ["کاملاً نادرست", "نادرست", "تا حدی نادرست", "تا حدی درست", "درست", "کاملاً درست"], "scale": [1, 2, 3, 4, 5, 6], "category": "طرحواره_وابستگی", "domain": "خودگردانی_و_عملکرد_مختل" },
-            { "id": "YSQ_14", "question": "در قضاوت خود در موقعیت‌های روزمره اعتماد ندارم.", "type": "likert", "options": ["کاملاً نادرست", "نادرست", "تا حدی نادرست", "تا حدی درست", "درست", "کاملاً درست"], "scale": [1, 2, 3, 4, 5, 6], "category": "طرحواره_وابستگی", "domain": "خودگردانی_و_عملکرد_مختل" },
-            { "id": "YSQ_15", "question": "فکر می‌کنم که اگر هر کاری را که می‌خواهم انجام دهم، مشکل ایجاد خواهد شد.", "type": "likert", "options": ["کاملاً نادرست", "نادرست", "تا حدی نادرست", "تا حدی درست", "درست", "کاملاً درست"], "scale": [1, 2, 3, 4, 5, 6], "category": "طرحواره_آسیب_پذیری", "domain": "خودگردانی_و_عملکرد_مختل" },
-            { "id": "YSQ_16", "question": "احساس می‌کنم که فاجعه‌ای (طبیعی، جنایی، مالی یا پزشکی) ممکن است هر لحظه رخ دهد.", "type": "likert", "options": ["کاملاً نادرست", "نادرست", "تا حدی نادرست", "تا حدی درست", "درست", "کاملاً درست"], "scale": [1, 2, 3, 4, 5, 6], "category": "طرحواره_آسیب_پذیری", "domain": "خودگردانی_و_عملکرد_مختل" },
-            { "id": "YSQ_17", "question": "بیش از حد به والدینم وابسته بوده‌ام، تا جایی که نمی‌دانم اگر آن‌ها نباشند چه خواهم کرد.", "type": "likert", "options": ["کاملاً نادرست", "نادرست", "تا حدی نادرست", "تا حدی درست", "درست", "کاملاً درست"], "scale": [1, 2, 3, 4, 5, 6], "category": "طرحواره_خودکامگی", "domain": "خودگردانی_و_عملکرد_مختل" },
-            { "id": "YSQ_18", "question": "احساس می‌کنم که در اساس نقص دارم و دیگران اگر مرا واقعاً بشناسند، نخواهند خواست با من باشند.", "type": "likert", "options": ["کاملاً نادرست", "نادرست", "تا حدی نادرست", "تا حدی درست", "درست", "کاملاً درست"], "scale": [1, 2, 3, 4, 5, 6], "category": "طرحواره_نقص", "domain": "جدایی_و_طرد" },
-            { "id": "YSQ_19", "question": "هیچ مرد (یا زن) که دوستش دارم نمی‌تواند مرا دوست داشته باشد وقتی نقاط ضعف من را ببیند.", "type": "likert", "options": ["کاملاً نادرست", "نادرست", "تا حدی نادرست", "تا حدی درست", "درست", "کاملاً درست"], "scale": [1, 2, 3, 4, 5, 6], "category": "طرحواره_نقص", "domain": "جدایی_و_طرد" },
-            { "id": "YSQ_20", "question": "در مورد کارهای مهم (کار یا مدرسه)، احساس می‌کنم که به اندازه دیگران با استعداد نیستم.", "type": "likert", "options": ["کاملاً نادرست", "نادرست", "تا حدی نادرست", "تا حدی درست", "درست", "کاملاً درست"], "scale": [1, 2, 3, 4, 5, 6], "category": "طرحواره_شکست", "domain": "خودگردانی_و_عملکرد_مختل" },
-            { "id": "YSQ_21", "question": "احساس می‌کنم که در زمینه‌های مهم زندگی (کار یا مدرسه) بی‌کفایت هستم.", "type": "likert", "options": ["کاملاً نادرست", "نادرست", "تا حدی نادرست", "تا حدی درست", "درست", "کاملاً درست"], "scale": [1, 2, 3, 4, 5, 6], "category": "طرحواره_شکست", "domain": "خودگردانی_و_عملکرد_مختل" },
-            { "id": "YSQ_22", "question": "بیشتر افراد، من را آدم مستحق تری از خودم می‌دانند.", "type": "likert", "options": ["کاملاً نادرست", "نادرست", "تا حدی نادرست", "تا حدی درست", "درست", "کاملاً درست"], "scale": [1, 2, 3, 4, 5, 6], "category": "طرحواره_حق_طلبی", "domain": "محدودیت‌های_مختل" },
-            { "id": "YSQ_23", "question": "احساس می‌کنم که آنچه ارائه می‌دهم، برای دیگران، بیشتر از آن چیزی است که از آن‌ها می‌گیرم.", "type": "likert", "options": ["کاملاً نادرست", "نادرست", "تا حدی نادرست", "تا حدی درست", "درست", "کاملاً درست"], "scale": [1, 2, 3, 4, 5, 6], "category": "طرحواره_ایثار", "domain": "جهت‌گیری_به_سوی_دیگران" },
-            { "id": "YSQ_24", "question": "آنقدر مشغول ارائه خدمت به دیگران هستم که وقت کمی برای خودم دارم.", "type": "likert", "options": ["کاملاً نادرست", "نادرست", "تا حدی نادرست", "تا حدی درست", "درست", "کاملاً درست"], "scale": [1, 2, 3, 4, 5, 6], "category": "طرحواره_ایثار", "domain": "جهت‌گیری_به_سوی_دیگران" },
-            { "id": "YSQ_25", "question": "مردم می‌بینند که من زیادی سخت‌گیر هستم.", "type": "likert", "options": ["کاملاً نادرست", "نادرست", "تا حدی نادرست", "تا حدی درست", "درست", "کاملاً درست"], "scale": [1, 2, 3, 4, 5, 6], "category": "طرحواره_معیارهای_سرسختانه", "domain": "هوشیاری_بیش_از_حد_و_بازداری" },
-            { "id": "YSQ_26", "question": "باید از همه جهت کامل باشم، در غیر این صورت ارزشی ندارم.", "type": "likert", "options": ["کاملاً نادرست", "نادرست", "تا حدی نادرست", "تا حدی درست", "درست", "کاملاً درست"], "scale": [1, 2, 3, 4, 5, 6], "category": "طرحواره_معیارهای_سرسختانه", "domain": "هوشیاری_بیش_از_حد_و_بازداری" },
-            { "id": "YSQ_27", "question": "در ابراز احساسات طبیعی یا صحبت آزادانه درباره خودم مشکل دارم.", "type": "likert", "options": ["کاملاً نادرست", "نادرست", "تا حدی نادرست", "تا حدی درست", "درست", "کاملاً درست"], "scale": [1, 2, 3, 4, 5, 6], "category": "طرحواره_بازداری_هیجانی", "domain": "هوشیاری_بیش_از_حد_و_بازداری" },
-            { "id": "YSQ_28", "question": "از ابراز احساسات مثبت (مثل محبت، علاقه نشان دادن) به دیگران اجتناب می‌کنم.", "type": "likert", "options": ["کاملاً نادرست", "نادرست", "تا حدی نادرست", "تا حدی درست", "درست", "کاملاً درست"], "scale": [1, 2, 3, 4, 5, 6], "category": "طرحواره_بازداری_هیجانی", "domain": "هوشیاری_بیش_از_حد_و_بازداری" },
-            { "id": "YSQ_29", "question": "حتی وقتی می‌دانم کسی اشتباه می‌کند، ترجیح می‌دهم تعارض و بحث را اجتناب کنم.", "type": "likert", "options": ["کاملاً نادرست", "نادرست", "تا حدی نادرست", "تا حدی درست", "درست", "کاملاً درست"], "scale": [1, 2, 3, 4, 5, 6], "category": "طرحواره_تسلیم", "domain": "جهت‌گیری_به_سوی_دیگران" },
-            { "id": "YSQ_30", "question": "همیشه دیگران را اول می‌گذارم و خودم را آخر.", "type": "likert", "options": ["کاملاً نادرست", "نادرست", "تا حدی نادرست", "تا حدی درست", "درست", "کاملاً درست"], "scale": [1, 2, 3, 4, 5, 6], "category": "طرحواره_تسلیم", "domain": "جهت‌گیری_به_سوی_دیگران" },
-            { "id": "YSQ_31", "question": "وقتی کسی رفتار بدی با من می‌کند، معمولاً فکر می‌کنم که مستحق آن هستم.", "type": "likert", "options": ["کاملاً نادرست", "نادرست", "تا حدی نادرست", "تا حدی درست", "درست", "کاملاً درست"], "scale": [1, 2, 3, 4, 5, 6], "category": "طرحواره_خودتنبیهی", "domain": "هوشیاری_بیش_از_حد_و_بازداری" },
-            { "id": "YSQ_32", "question": "وقتی اشتباه می‌کنم، مستحق تنبیه هستم.", "type": "likert", "options": ["کاملاً نادرست", "نادرست", "تا حدی نادرست", "تا حدی درست", "درست", "کاملاً درست"], "scale": [1, 2, 3, 4, 5, 6], "category": "طرحواره_خودتنبیهی", "domain": "هوشیاری_بیش_از_حد_و_بازداری" },
-            { "id": "YSQ_33", "question": "خیلی مهم است که جلب توجه و تحسین کنم.", "type": "likert", "options": ["کاملاً نادرست", "نادرست", "تا حدی نادرست", "تا حدی درست", "درست", "کاملاً درست"], "scale": [1, 2, 3, 4, 5, 6], "category": "طرحواره_جویای_تحسین", "domain": "جهت‌گیری_به_سوی_دیگران" },
-            { "id": "YSQ_34", "question": "پول و موقعیت اجتماعی برایم خیلی مهم است.", "type": "likert", "options": ["کاملاً نادرست", "نادرست", "تا حدی نادرست", "تا حدی درست", "درست", "کاملاً درست"], "scale": [1, 2, 3, 4, 5, 6], "category": "طرحواره_جویای_تحسین", "domain": "جهت‌گیری_به_سوی_دیگران" },
-            { "id": "YSQ_35", "question": "اگر نتوانم اهدافم را محقق کنم، به راحتی عصبانی و بی‌حوصله می‌شوم.", "type": "likert", "options": ["کاملاً نادرست", "نادرست", "تا حدی نادرست", "تا حدی درست", "درست", "کاملاً درست"], "scale": [1, 2, 3, 4, 5, 6], "category": "طرحواره_خودکنترلی_ناکافی", "domain": "محدودیت‌های_مختل" },
-            { "id": "YSQ_36", "question": "در کنترل خودم و رعایت نظم مشکل دارم.", "type": "likert", "options": ["کاملاً نادرست", "نادرست", "تا حدی نادرست", "تا حدی درست", "درست", "کاملاً درست"], "scale": [1, 2, 3, 4, 5, 6], "category": "طرحواره_خودکنترلی_ناکافی", "domain": "محدودیت‌های_مختل" },
-            { "id": "YSQ_37", "question": "احساس می‌کنم که قوانین و مقررات برای من اعمال نمی‌شود.", "type": "likert", "options": ["کاملاً نادرست", "نادرست", "تا حدی نادرست", "تا حدی درست", "درست", "کاملاً درست"], "scale": [1, 2, 3, 4, 5, 6], "category": "طرحواره_حق_طلبی", "domain": "محدودیت‌های_مختل" },
-            { "id": "YSQ_38", "question": "مشکل در تشخیص اینکه چگونه احساس می‌کنم و چه می‌خواهم، دارم.", "type": "likert", "options": ["کاملاً نادرست", "نادرست", "تا حدی نادرست", "تا حدی درست", "درست", "کاملاً درست"], "scale": [1, 2, 3, 4, 5, 6], "category": "طرحواره_خودکامگی", "domain": "خودگردانی_و_عملکرد_مختل" },
-            { "id": "YSQ_39", "question": "احساس می‌کنم که تمام مسئولیت‌ها بر عهده من است.", "type": "likert", "options": ["کاملاً نادرست", "نادرست", "تا حدی نادرست", "تا حدی درست", "درست", "کاملاً درست"], "scale": [1, 2, 3, 4, 5, 6], "category": "طرحواره_معیارهای_سرسختانه", "domain": "هوشیاری_بیش_از_حد_و_بازداری" },
-            { "id": "YSQ_40", "question": "مردم فکر می‌کنند که من خیلی کنترل‌گر و کمال‌طلب هستم.", "type": "likert", "options": ["کاملاً نادرست", "نادرست", "تا حدی نادرست", "تا حدی درست", "درست", "کاملاً درست"], "scale": [1, 2, 3, 4, 5, 6], "category": "طرحواره_معیارهای_سرسختانه", "domain": "هوشیاری_بیش_از_حد_و_بازداری" },
-            { "id": "YSQ_41", "question": "اگر اشتباه کنم، خودم را سخت سرزنش می‌کنم.", "type": "likert", "options": ["کاملاً نادرست", "نادرست", "تا حدی نادرست", "تا حدی درست", "درست", "کاملاً درست"], "scale": [1, 2, 3, 4, 5, 6], "category": "طرحواره_خودتنبیهی", "domain": "هوشیاری_بیش_از_حد_و_بازداری" },
-            { "id": "YSQ_42", "question": "نسبت به ابراز عشق و محبت احساس خجالت می‌کنم.", "type": "likert", "options": ["کاملاً نادرست", "نادرست", "تا حدی نادرست", "تا حدی درست", "درست", "کاملاً درست"], "scale": [1, 2, 3, 4, 5, 6], "category": "طرحواره_بازداری_هیجانی", "domain": "هوشیاری_بیش_از_حد_و_بازداری" },
-            { "id": "YSQ_43", "question": "مردم انتظار دارند من کارهای زیادی انجام دهم و خودم را فدا کنم.", "type": "likert", "options": ["کاملاً نادرست", "نادرست", "تا حدی نادرست", "تا حدی درست", "درست", "کاملاً درست"], "scale": [1, 2, 3, 4, 5, 6], "category": "طرحواره_ایثار", "domain": "جهت‌گیری_به_سوی_دیگران" },
-            { "id": "YSQ_44", "question": "اگر از کاری که از من خواسته شده، سر باز زنم، احساس گناه می‌کنم.", "type": "likert", "options": ["کاملاً نادرست", "نادرست", "تا حدی نادرست", "تا حدی درست", "درست", "کاملاً درست"], "scale": [1, 2, 3, 4, 5, 6], "category": "طرحواره_تسلیم", "domain": "جهت‌گیری_به_سوی_دیگران" },
-            { "id": "YSQ_45", "question": "برای جلب توجه دیگران تلاش زیادی می‌کنم.", "type": "likert", "options": ["کاملاً نادرست", "نادرست", "تا حدی نادرست", "تا حدی درست", "درست", "کاملاً درست"], "scale": [1, 2, 3, 4, 5, 6], "category": "طرحواره_جویای_تحسین", "domain": "جهت‌گیری_به_سوی_دیگران" },
-            { "id": "YSQ_46", "question": "کنترل تمایلاتم برایم مشکل است.", "type": "likert", "options": ["کاملاً نادرست", "نادرست", "تا حدی نادرست", "تا حدی درست", "درست", "کاملاً درست"], "scale": [1, 2, 3, 4, 5, 6], "category": "طرحواره_خودکنترلی_ناکافی", "domain": "محدودیت‌های_مختل" },
-            { "id": "YSQ_47", "question": "همیشه واقعه‌ها را به بدترین شکل تعبیر می‌کنم.", "type": "likert", "options": ["کاملاً نادرست", "نادرست", "تا حدی نادرست", "تا حدی درست", "درست", "کاملاً درست"], "scale": [1, 2, 3, 4, 5, 6], "category": "طرحواره_بدبینی", "domain": "هوشیاری_بیش_از_حد_و_بازداری" },
-            { "id": "YSQ_48", "question": "سعی می‌کنم از هر چیز جلوگیری کنم که ممکن است اشتباه پیش برود.", "type": "likert", "options": ["کاملاً نادرست", "نادرست", "تا حدی نادرست", "تا حدی درست", "درست", "کاملاً درست"], "scale": [1, 2, 3, 4, 5, 6], "category": "طرحواره_بدبینی", "domain": "هوشیاری_بیش_از_حد_و_بازداری" },
-            { "id": "YSQ_49", "question": "اگر تصمیم بگیرم کاری را انجام دهم، حتی اگر دیگران مخالف باشند، آن را انجام می‌دهم.", "type": "likert", "options": ["کاملاً نادرست", "نادرست", "تا حدی نادرست", "تا حدی درست", "درست", "کاملاً درست"], "scale": [1, 2, 3, 4, 5, 6], "category": "طرحواره_حق_طلبی", "domain": "محدودیت‌های_مختل" },
-            { "id": "YSQ_50", "question": "در دوستی‌های نزدیک، طرف مقابل همیشه می‌خواهد بیش از آنچه می‌دهد، بگیرد.", "type": "likert", "options": ["کاملاً نادرست", "نادرست", "تا حدی نادرست", "تا حدی درست", "درست", "کاملاً درست"], "scale": [1, 2, 3, 4, 5, 6], "category": "طرحواره_بی_اعتمادی", "domain": "جدایی_و_طرد" },
-            { "id": "YSQ_51", "question": "احساس می‌کنم مردم از من سوءاستفاده می‌کنند.", "type": "likert", "options": ["کاملاً نادرست", "نادرست", "تا حدی نادرست", "تا حدی درست", "درست", "کاملاً درست"], "scale": [1, 2, 3, 4, 5, 6], "category": "طرحواره_بی_اعتمادی", "domain": "جدایی_و_طرد" },
-            { "id": "YSQ_52", "question": "مواظب هستم که مردم انگیزه‌های واقعی‌شان را پنهان نکنند.", "type": "likert", "options": ["کاملاً نادرست", "نادرست", "تا حدی نادرست", "تا حدی درست", "درست", "کاملاً درست"], "scale": [1, 2, 3, 4, 5, 6], "category": "طرحواره_بی_اعتمادی", "domain": "جدایی_و_طرد" },
-            { "id": "YSQ_53", "question": "حتی وقتی همه چیز خوب پیش می‌رود، احساس می‌کنم این وضعیت دوام نخواهد آورد.", "type": "likert", "options": ["کاملاً نادرست", "نادرست", "تا حدی نادرست", "تا حدی درست", "درست", "کاملاً درست"], "scale": [1, 2, 3, 4, 5, 6], "category": "طرحواره_بدبینی", "domain": "هوشیاری_بیش_از_حد_و_بازداری" },
-            { "id": "YSQ_54", "question": "اگر کسی با من خوب رفتار کند، به نگرانی می‌افتم که قطعاً چیز پنهانی می‌خواهد.", "type": "likert", "options": ["کاملاً نادرست", "نادرست", "تا حدی نادرست", "تا حدی درست", "درست", "کاملاً درست"], "scale": [1, 2, 3, 4, 5, 6], "category": "طرحواره_بی_اعتمادی", "domain": "جدایی_و_طرد" },
-            { "id": "YSQ_55", "question": "از کودکی کسی مراقبم نبوده، راهنماییم نکرده یا به من جهت نداده است.", "type": "likert", "options": ["کاملاً نادرست", "نادرست", "تا حدی نادرست", "تا حدی درست", "درست", "کاملاً درست"], "scale": [1, 2, 3, 4, 5, 6], "category": "طرحواره_محرومیت_هیجانی", "domain": "جدایی_و_طرد" },
-            { "id": "YSQ_56", "question": "بیشتر اوقات احساس می‌کنم کسی واقعاً نمی‌فهمد که چه احساسی دارم.", "type": "likert", "options": ["کاملاً نادرست", "نادرست", "تا حدی نادرست", "تا حدی درست", "درست", "کاملاً درست"], "scale": [1, 2, 3, 4, 5, 6], "category": "طرحواره_محرومیت_هیجانی", "domain": "جدایی_و_طرد" },
-            { "id": "YSQ_57", "question": "وقتی اشتباهی انجام دهم، احساس می‌کنم که شایسته بخشیده شدن نیستم.", "type": "likert", "options": ["کاملاً نادرست", "نادرست", "تا حدی نادرست", "تا حدی درست", "درست", "کاملاً درست"], "scale": [1, 2, 3, 4, 5, 6], "category": "طرحواره_شرم", "domain": "جدایی_و_طرد" },
-            { "id": "YSQ_58", "question": "به نظر من هیچ‌کس آنقدر که من برایش مهم هستم، من برایش مهم نیستم.", "type": "likert", "options": ["کاملاً نادرست", "نادرست", "تا حدی نادرست", "تا حدی درست", "درست", "کاملاً درست"], "scale": [1, 2, 3, 4, 5, 6], "category": "طرحواره_محرومیت_هیجانی", "domain": "جدایی_و_طرد" },
-            { "id": "YSQ_59", "question": "وقتی احساس می‌کنم کسی که دوستش دارم به من علاقه‌ای نشان نمی‌دهد، احساس تنهایی و پوچی می‌کنم.", "type": "likert", "options": ["کاملاً نادرست", "نادرست", "تا حدی نادرست", "تا حدی درست", "درست", "کاملاً درست"], "scale": [1, 2, 3, 4, 5, 6], "category": "طرحواره_ترک_شدگی", "domain": "جدایی_و_طرد" },
-            { "id": "YSQ_60", "question": "در بسیاری از موقعیت‌ها نگرانم که افراد نزدیک به من مرا ترک کنند.", "type": "likert", "options": ["کاملاً نادرست", "نادرست", "تا حدی نادرست", "تا حدی درست", "درست", "کاملاً درست"], "scale": [1, 2, 3, 4, 5, 6], "category": "طرحواره_ترک_شدگی", "domain": "جدایی_و_طرد" },
-            { "id": "YSQ_61", "question": "نیاز دارم که دیگران آنقدر به من نزدیک باشند که نتوانم بدون آن‌ها زندگی کنم.", "type": "likert", "options": ["کاملاً نادرست", "نادرست", "تا حدی نادرست", "تا حدی درست", "درست", "کاملاً درست"], "scale": [1, 2, 3, 4, 5, 6], "category": "طرحواره_وابستگی", "domain": "خودگردانی_و_عملکرد_مختل" },
-            { "id": "YSQ_62", "question": "احساس می‌کنم که در زندگی روزمره بی‌کفایت هستم.", "type": "likert", "options": ["کاملاً نادرست", "نادرست", "تا حدی نادرست", "تا حدی درست", "درست", "کاملاً درست"], "scale": [1, 2, 3, 4, 5, 6], "category": "طرحواره_وابستگی", "domain": "خودگردانی_و_عملکرد_مختل" },
-            { "id": "YSQ_63", "question": "خود را فردی می‌دانم که بر زندگی‌اش تسلط ندارد.", "type": "likert", "options": ["کاملاً نادرست", "نادرست", "تا حدی نادرست", "تا حدی درست", "درست", "کاملاً درست"], "scale": [1, 2, 3, 4, 5, 6], "category": "طرحواره_شکست", "domain": "خودگردانی_و_عملکرد_مختل" },
-            { "id": "YSQ_64", "question": "در مقایسه با دیگران، احساس می‌کنم به لحاظ کاری موفق نیستم.", "type": "likert", "options": ["کاملاً نادرست", "نادرست", "تا حدی نادرست", "تا حدی درست", "درست", "کاملاً درست"], "scale": [1, 2, 3, 4, 5, 6], "category": "طرحواره_شکست", "domain": "خودگردانی_و_عملکرد_مختل" },
-            { "id": "YSQ_65", "question": "احساس می‌کنم که آنچه برای ارائه دادن دارم، ارزشی ندارد.", "type": "likert", "options": ["کاملاً نادرست", "نادرست", "تا حدی نادرست", "تا حدی درست", "درست", "کاملاً درست"], "scale": [1, 2, 3, 4, 5, 6], "category": "طرحواره_نقص", "domain": "جدایی_و_طرد" },
-            { "id": "YSQ_66", "question": "احساس می‌کنم که از نظر اجتماعی، نامطلوب هستم.", "type": "likert", "options": ["کاملاً نادرست", "نادرست", "تا حدی نادرست", "تا حدی درست", "درست", "کاملاً درست"], "scale": [1, 2, 3, 4, 5, 6], "category": "طرحواره_نقص", "domain": "جدایی_و_طرد" },
-            { "id": "YSQ_67", "question": "از کودکی کسی مراقبم نبوده، راهنماییم نکرده یا به من جهت نداده است.", "type": "likert", "options": ["کاملاً نادرست", "نادرست", "تا حدی نادرست", "تا حدی درست", "درست", "کاملاً درست"], "scale": [1, 2, 3, 4, 5, 6], "category": "طرحواره_محرومیت_هیجانی", "domain": "جدایی_و_طرد" },
-            { "id": "YSQ_68", "question": "بیشتر اوقات احساس می‌کنم کسی واقعاً نمی‌فهمد که چه احساسی دارم.", "type": "likert", "options": ["کاملاً نادرست", "نادرست", "تا حدی نادرست", "تا حدی درست", "درست", "کاملاً درست"], "scale": [1, 2, 3, 4, 5, 6], "category": "طرحواره_محرومیت_هیجانی", "domain": "جدایی_و_طرد" },
-            { "id": "YSQ_69", "question": "وقتی اشتباهی انجام دهم، احساس می‌کنم که شایسته بخشیده شدن نیستم.", "type": "likert", "options": ["کاملاً نادرست", "نادرست", "تا حدی نادرست", "تا حدی درست", "درست", "کاملاً درست"], "scale": [1, 2, 3, 4, 5, 6], "category": "طرحواره_شرم", "domain": "جدایی_و_طرد" },
-            { "id": "YSQ_70", "question": "به نظر من هیچ‌کس آنقدر که من برایش مهم هستم، من برایش مهم نیستم.", "type": "likert", "options": ["کاملاً نادرست", "نادرست", "تا حدی نادرست", "تا حدی درست", "درست", "کاملاً درست"], "scale": [1, 2, 3, 4, 5, 6], "category": "طرحواره_محرومیت_هیجانی", "domain": "جدایی_و_طرد" },
-            { "id": "YSQ_71", "question": "وقتی احساس می‌کنم کسی که دوستش دارم به من علاقه‌ای نشان نمی‌دهد، احساس تنهایی و پوچی می‌کنم.", "type": "likert", "options": ["کاملاً نادرست", "نادرست", "تا حدی نادرست", "تا حدی درست", "درست", "کاملاً درست"], "scale": [1, 2, 3, 4, 5, 6], "category": "طرحواره_ترک_شدگی", "domain": "جدایی_و_طرد" },
-            { "id": "YSQ_72", "question": "در بسیاری از موقعیت‌ها نگرانم که افراد نزدیک به من مرا ترک کنند.", "type": "likert", "options": ["کاملاً نادرست", "نادرست", "تا حدی نادرست", "تا حدی درست", "درست", "کاملاً درست"], "scale": [1, 2, 3, 4, 5, 6], "category": "طرحواره_ترک_شدگی", "domain": "جدایی_و_طرد" },
-            { "id": "YSQ_73", "question": "نیاز دارم که دیگران آنقدر به من نزدیک باشند که نتوانم بدون آن‌ها زندگی کنم.", "type": "likert", "options": ["کاملاً نادرست", "نادرست", "تا حدی نادرست", "تا حدی درست", "درست", "کاملاً درست"], "scale": [1, 2, 3, 4, 5, 6], "category": "طرحواره_وابستگی", "domain": "خودگردانی_و_عملکرد_مختل" },
-            { "id": "YSQ_74", "question": "احساس می‌کنم که در زندگی روزمره بی‌کفایت هستم.", "type": "likert", "options": ["کاملاً نادرست", "نادرست", "تا حدی نادرست", "تا حدی درست", "درست", "کاملاً درست"], "scale": [1, 2, 3, 4, 5, 6], "category": "طرحواره_وابستگی", "domain": "خودگردانی_و_عملکرد_مختل" },
-            { "id": "YSQ_75", "question": "خود را فردی می‌دانم که بر زندگی‌اش تسلط ندارد.", "type": "likert", "options": ["کاملاً نادرست", "نادرست", "تا حدی نادرست", "تا حدی درست", "درست", "کاملاً درست"], "scale": [1, 2, 3, 4, 5, 6], "category": "طرحواره_شکست", "domain": "خودگردانی_و_عملکرد_مختل" }
-        ];
+      // Data for the YSQ questions (provided by the user)
+      const ysqQuestions = [
+        {
+          id: "YSQ_1",
+          question: "مردم به طور کلی برای من حمایت نخواهند کرد.",
+          type: "likert",
+          options: [
+            "کاملاً نادرست",
+            "نادرست",
+            "تا حدی نادرست",
+            "تا حدی درست",
+            "درست",
+            "کاملاً درست"
+          ],
+          scale: [1, 2, 3, 4, 5, 6],
+          category: "طرحواره_حق_طلبی",
+          domain: "محدودیت‌های_مختل"
+        },
+        {
+          id: "YSQ_2",
+          question:
+            "اکثر اوقات کسی در کنارم نیست که مراقبم باشد، احساساتم را در میان بگذارم یا واقعاً درباره‌ام فکر کند.",
+          type: "likert",
+          options: [
+            "کاملاً نادرست",
+            "نادرست",
+            "تا حدی نادرست",
+            "تا حدی درست",
+            "درست",
+            "کاملاً درست"
+          ],
+          scale: [1, 2, 3, 4, 5, 6],
+          category: "طرحواره_محرومیت_هیجانی",
+          domain: "جدایی_و_طرد"
+        },
+        {
+          id: "YSQ_3",
+          question: "بیشتر وقت‌ها کسی نیست که واقعاً مرا درک کند.",
+          type: "likert",
+          options: [
+            "کاملاً نادرست",
+            "نادرست",
+            "تا حدی نادرست",
+            "تا حدی درست",
+            "درست",
+            "کاملاً درست"
+          ],
+          scale: [1, 2, 3, 4, 5, 6],
+          category: "طرحواره_محرومیت_هیجانی",
+          domain: "جدایی_و_طرد"
+        },
+        {
+          id: "YSQ_4",
+          question:
+            "به ندرت مردم قوی و قابل اعتمادی پیدا کرده‌ام که بتوانم به آن‌ها تکیه کنم و از آن‌ها حمایت بگیرم.",
+          type: "likert",
+          options: [
+            "کاملاً نادرست",
+            "نادرست",
+            "تا حدی نادرست",
+            "تا حدی درست",
+            "درست",
+            "کاملاً درست"
+          ],
+          scale: [1, 2, 3, 4, 5, 6],
+          category: "طرحواره_محرومیت_هیجانی",
+          domain: "جدایی_و_طرد"
+        },
+        {
+          id: "YSQ_5",
+          question:
+            "احساس می‌کنم که کسانی که برایم مهم هستند، مرا ترک خواهند کرد.",
+          type: "likert",
+          options: [
+            "کاملاً نادرست",
+            "نادرست",
+            "تا حدی نادرست",
+            "تا حدی درست",
+            "درست",
+            "کاملاً درست"
+          ],
+          scale: [1, 2, 3, 4, 5, 6],
+          category: "طرحواره_ترک_شدگی",
+          domain: "جدایی_و_طرد"
+        },
+        {
+          id: "YSQ_6",
+          question:
+            "نگران این هستم که افراد نزدیک به من، مرا ترک کنند یا از من دور شوند.",
+          type: "likert",
+          options: [
+            "کاملاً نادرست",
+            "نادرست",
+            "تا حدی نادرست",
+            "تا حدی درست",
+            "درست",
+            "کاملاً درست"
+          ],
+          scale: [1, 2, 3, 4, 5, 6],
+          category: "طرحواره_ترک_شدگی",
+          domain: "جدایی_و_طرد"
+        },
+        {
+          id: "YSQ_7",
+          question:
+            "وقتی احساس می‌کنم کسی که برایم مهم است، در حال دور شدن از من است، کنترل خودم را از دست می‌دهم.",
+          type: "likert",
+          options: [
+            "کاملاً نادرست",
+            "نادرست",
+            "تا حدی نادرست",
+            "تا حدی درست",
+            "درست",
+            "کاملاً درست"
+          ],
+          scale: [1, 2, 3, 4, 5, 6],
+          category: "طرحواره_ترک_شدگی",
+          domain: "جدایی_و_طرد"
+        },
+        {
+          id: "YSQ_8",
+          question:
+            "به خاطر ناتوانی‌هایم در روابط اجتماعی، احساس می‌کنم از دیگران جدا هستم.",
+          type: "likert",
+          options: [
+            "کاملاً نادرست",
+            "نادرست",
+            "تا حدی نادرست",
+            "تا حدی درست",
+            "درست",
+            "کاملاً درست"
+          ],
+          scale: [1, 2, 3, 4, 5, 6],
+          category: "طرحواره_انزوای_اجتماعی",
+          domain: "جدایی_و_طرد"
+        },
+        {
+          id: "YSQ_9",
+          question: "احساس می‌کنم با دیگران ارتباط ندارم.",
+          type: "likert",
+          options: [
+            "کاملاً نادرست",
+            "نادرست",
+            "تا حدی نادرست",
+            "تا حدی درست",
+            "درست",
+            "کاملاً درست"
+          ],
+          scale: [1, 2, 3, 4, 5, 6],
+          category: "طرحواره_انزوای_اجتماعی",
+          domain: "جدایی_و_طرد"
+        },
+        {
+          id: "YSQ_10",
+          question: "همیشه احساس می‌کنم که خارج از گروه قرار دارم.",
+          type: "likert",
+          options: [
+            "کاملاً نادرست",
+            "نادرست",
+            "تا حدی نادرست",
+            "تا حدی درست",
+            "درست",
+            "کاملاً درست"
+          ],
+          scale: [1, 2, 3, 4, 5, 6],
+          category: "طرحواره_انزوای_اجتماعی",
+          domain: "جدایی_و_طرد"
+        },
+        {
+          id: "YSQ_11",
+          question:
+            "خانواده‌ام و من بیش از حد درگیر زندگی و مشکلات یکدیگر هستیم.",
+          type: "likert",
+          options: [
+            "کاملاً نادرست",
+            "نادرست",
+            "تا حدی نادرست",
+            "تا حدی درست",
+            "درست",
+            "کاملاً درست"
+          ],
+          scale: [1, 2, 3, 4, 5, 6],
+          category: "طرحواره_خودکامگی",
+          domain: "خودگردانی_و_عملکرد_مختل"
+        },
+        {
+          id: "YSQ_12",
+          question: "احساس می‌کنم هویت مستقلی ندارم - جدا از والدین یا همسرم.",
+          type: "likert",
+          options: [
+            "کاملاً نادرست",
+            "نادرست",
+            "تا حدی نادرست",
+            "تا حدی درست",
+            "درست",
+            "کاملاً درست"
+          ],
+          scale: [1, 2, 3, 4, 5, 6],
+          category: "طرحواره_خودکامگی",
+          domain: "خودگردانی_و_عملکرد_مختل"
+        },
+        {
+          id: "YSQ_13",
+          question:
+            "احساس می‌کنم که نمی‌توانم بدون کمک زیاد افراد نزدیک به خودم، زندگی روزمره‌ام را بگذرانم.",
+          type: "likert",
+          options: [
+            "کاملاً نادرست",
+            "نادرست",
+            "تا حدی نادرست",
+            "تا حدی درست",
+            "درست",
+            "کاملاً درست"
+          ],
+          scale: [1, 2, 3, 4, 5, 6],
+          category: "طرحواره_وابستگی",
+          domain: "خودگردانی_و_عملکرد_مختل"
+        },
+        {
+          id: "YSQ_14",
+          question: "در قضاوت خود در موقعیت‌های روزمره اعتماد ندارم.",
+          type: "likert",
+          options: [
+            "کاملاً نادرست",
+            "نادرست",
+            "تا حدی نادرست",
+            "تا حدی درست",
+            "درست",
+            "کاملاً درست"
+          ],
+          scale: [1, 2, 3, 4, 5, 6],
+          category: "طرحواره_وابستگی",
+          domain: "خودگردانی_و_عملکرد_مختل"
+        },
+        {
+          id: "YSQ_15",
+          question:
+            "فکر می‌کنم که اگر هر کاری را که می‌خواهم انجام دهم، مشکل ایجاد خواهد شد.",
+          type: "likert",
+          options: [
+            "کاملاً نادرست",
+            "نادرست",
+            "تا حدی نادرست",
+            "تا حدی درست",
+            "درست",
+            "کاملاً درست"
+          ],
+          scale: [1, 2, 3, 4, 5, 6],
+          category: "طرحواره_آسیب_پذیری",
+          domain: "خودگردانی_و_عملکرد_مختل"
+        },
+        {
+          id: "YSQ_16",
+          question:
+            "احساس می‌کنم که فاجعه‌ای (طبیعی، جنایی، مالی یا پزشکی) ممکن است هر لحظه رخ دهد.",
+          type: "likert",
+          options: [
+            "کاملاً نادرست",
+            "نادرست",
+            "تا حدی نادرست",
+            "تا حدی درست",
+            "درست",
+            "کاملاً درست"
+          ],
+          scale: [1, 2, 3, 4, 5, 6],
+          category: "طرحواره_آسیب_پذیری",
+          domain: "خودگردانی_و_عملکرد_مختل"
+        },
+        {
+          id: "YSQ_17",
+          question:
+            "بیش از حد به والدینم وابسته بوده‌ام، تا جایی که نمی‌دانم اگر آن‌ها نباشند چه خواهم کرد.",
+          type: "likert",
+          options: [
+            "کاملاً نادرست",
+            "نادرست",
+            "تا حدی نادرست",
+            "تا حدی درست",
+            "درست",
+            "کاملاً درست"
+          ],
+          scale: [1, 2, 3, 4, 5, 6],
+          category: "طرحواره_خودکامگی",
+          domain: "خودگردانی_و_عملکرد_مختل"
+        },
+        {
+          id: "YSQ_18",
+          question:
+            "احساس می‌کنم که در اساس نقص دارم و دیگران اگر مرا واقعاً بشناسند، نخواهند خواست با من باشند.",
+          type: "likert",
+          options: [
+            "کاملاً نادرست",
+            "نادرست",
+            "تا حدی نادرست",
+            "تا حدی درست",
+            "درست",
+            "کاملاً درست"
+          ],
+          scale: [1, 2, 3, 4, 5, 6],
+          category: "طرحواره_نقص",
+          domain: "جدایی_و_طرد"
+        },
+        {
+          id: "YSQ_19",
+          question:
+            "هیچ مرد (یا زن) که دوستش دارم نمی‌تواند مرا دوست داشته باشد وقتی نقاط ضعف من را ببیند.",
+          type: "likert",
+          options: [
+            "کاملاً نادرست",
+            "نادرست",
+            "تا حدی نادرست",
+            "تا حدی درست",
+            "درست",
+            "کاملاً درست"
+          ],
+          scale: [1, 2, 3, 4, 5, 6],
+          category: "طرحواره_نقص",
+          domain: "جدایی_و_طرد"
+        },
+        {
+          id: "YSQ_20",
+          question:
+            "در مورد کارهای مهم (کار یا مدرسه)، احساس می‌کنم که به اندازه دیگران با استعداد نیستم.",
+          type: "likert",
+          options: [
+            "کاملاً نادرست",
+            "نادرست",
+            "تا حدی نادرست",
+            "تا حدی درست",
+            "درست",
+            "کاملاً درست"
+          ],
+          scale: [1, 2, 3, 4, 5, 6],
+          category: "طرحواره_شکست",
+          domain: "خودگردانی_و_عملکرد_مختل"
+        },
+        {
+          id: "YSQ_21",
+          question:
+            "احساس می‌کنم که در زمینه‌های مهم زندگی (کار یا مدرسه) بی‌کفایت هستم.",
+          type: "likert",
+          options: [
+            "کاملاً نادرست",
+            "نادرست",
+            "تا حدی نادرست",
+            "تا حدی درست",
+            "درست",
+            "کاملاً درست"
+          ],
+          scale: [1, 2, 3, 4, 5, 6],
+          category: "طرحواره_شکست",
+          domain: "خودگردانی_و_عملکرد_مختل"
+        },
+        {
+          id: "YSQ_22",
+          question: "بیشتر افراد، من را آدم مستحق تری از خودم می‌دانند.",
+          type: "likert",
+          options: [
+            "کاملاً نادرست",
+            "نادرست",
+            "تا حدی نادرست",
+            "تا حدی درست",
+            "درست",
+            "کاملاً درست"
+          ],
+          scale: [1, 2, 3, 4, 5, 6],
+          category: "طرحواره_حق_طلبی",
+          domain: "محدودیت‌های_مختل"
+        },
+        {
+          id: "YSQ_23",
+          question:
+            "احساس می‌کنم که آنچه ارائه می‌دهم، برای دیگران، بیشتر از آن چیزی است که از آن‌ها می‌گیرم.",
+          type: "likert",
+          options: [
+            "کاملاً نادرست",
+            "نادرست",
+            "تا حدی نادرست",
+            "تا حدی درست",
+            "درست",
+            "کاملاً درست"
+          ],
+          scale: [1, 2, 3, 4, 5, 6],
+          category: "طرحواره_ایثار",
+          domain: "جهت‌گیری_به_سوی_دیگران"
+        },
+        {
+          id: "YSQ_24",
+          question:
+            "آنقدر مشغول ارائه خدمت به دیگران هستم که وقت کمی برای خودم دارم.",
+          type: "likert",
+          options: [
+            "کاملاً نادرست",
+            "نادرست",
+            "تا حدی نادرست",
+            "تا حدی درست",
+            "درست",
+            "کاملاً درست"
+          ],
+          scale: [1, 2, 3, 4, 5, 6],
+          category: "طرحواره_ایثار",
+          domain: "جهت‌گیری_به_سوی_دیگران"
+        },
+        {
+          id: "YSQ_25",
+          question: "مردم می‌بینند که من زیادی سخت‌گیر هستم.",
+          type: "likert",
+          options: [
+            "کاملاً نادرست",
+            "نادرست",
+            "تا حدی نادرست",
+            "تا حدی درست",
+            "درست",
+            "کاملاً درست"
+          ],
+          scale: [1, 2, 3, 4, 5, 6],
+          category: "طرحواره_معیارهای_سرسختانه",
+          domain: "هوشیاری_بیش_از_حد_و_بازداری"
+        },
+        {
+          id: "YSQ_26",
+          question: "باید از همه جهت کامل باشم، در غیر این صورت ارزشی ندارم.",
+          type: "likert",
+          options: [
+            "کاملاً نادرست",
+            "نادرست",
+            "تا حدی نادرست",
+            "تا حدی درست",
+            "درست",
+            "کاملاً درست"
+          ],
+          scale: [1, 2, 3, 4, 5, 6],
+          category: "طرحواره_معیارهای_سرسختانه",
+          domain: "هوشیاری_بیش_از_حد_و_بازداری"
+        },
+        {
+          id: "YSQ_27",
+          question:
+            "در ابراز احساسات طبیعی یا صحبت آزادانه درباره خودم مشکل دارم.",
+          type: "likert",
+          options: [
+            "کاملاً نادرست",
+            "نادرست",
+            "تا حدی نادرست",
+            "تا حدی درست",
+            "درست",
+            "کاملاً درست"
+          ],
+          scale: [1, 2, 3, 4, 5, 6],
+          category: "طرحواره_بازداری_هیجانی",
+          domain: "هوشیاری_بیش_از_حد_و_بازداری"
+        },
+        {
+          id: "YSQ_28",
+          question:
+            "از ابراز احساسات مثبت (مثل محبت، علاقه نشان دادن) به دیگران اجتناب می‌کنم.",
+          type: "likert",
+          options: [
+            "کاملاً نادرست",
+            "نادرست",
+            "تا حدی نادرست",
+            "تا حدی درست",
+            "درست",
+            "کاملاً درست"
+          ],
+          scale: [1, 2, 3, 4, 5, 6],
+          category: "طرحواره_بازداری_هیجانی",
+          domain: "هوشیاری_بیش_از_حد_و_بازداری"
+        },
+        {
+          id: "YSQ_29",
+          question:
+            "حتی وقتی می‌دانم کسی اشتباه می‌کند، ترجیح می‌دهم تعارض و بحث را اجتناب کنم.",
+          type: "likert",
+          options: [
+            "کاملاً نادرست",
+            "نادرست",
+            "تا حدی نادرست",
+            "تا حدی درست",
+            "درست",
+            "کاملاً درست"
+          ],
+          scale: [1, 2, 3, 4, 5, 6],
+          category: "طرحواره_تسلیم",
+          domain: "جهت‌گیری_به_سوی_دیگران"
+        },
+        {
+          id: "YSQ_30",
+          question: "همیشه دیگران را اول می‌گذارم و خودم را آخر.",
+          type: "likert",
+          options: [
+            "کاملاً نادرست",
+            "نادرست",
+            "تا حدی نادرست",
+            "تا حدی درست",
+            "درست",
+            "کاملاً درست"
+          ],
+          scale: [1, 2, 3, 4, 5, 6],
+          category: "طرحواره_تسلیم",
+          domain: "جهت‌گیری_به_سوی_دیگران"
+        },
+        {
+          id: "YSQ_31",
+          question:
+            "وقتی کسی رفتار بدی با من می‌کند، معمولاً فکر می‌کنم که مستحق آن هستم.",
+          type: "likert",
+          options: [
+            "کاملاً نادرست",
+            "نادرست",
+            "تا حدی نادرست",
+            "تا حدی درست",
+            "درست",
+            "کاملاً درست"
+          ],
+          scale: [1, 2, 3, 4, 5, 6],
+          category: "طرحواره_خودتنبیهی",
+          domain: "هوشیاری_بیش_از_حد_و_بازداری"
+        },
+        {
+          id: "YSQ_32",
+          question: "وقتی اشتباه می‌کنم، مستحق تنبیه هستم.",
+          type: "likert",
+          options: [
+            "کاملاً نادرست",
+            "نادرست",
+            "تا حدی نادرست",
+            "تا حدی درست",
+            "درست",
+            "کاملاً درست"
+          ],
+          scale: [1, 2, 3, 4, 5, 6],
+          category: "طرحواره_خودتنبیهی",
+          domain: "هوشیاری_بیش_از_حد_و_بازداری"
+        },
+        {
+          id: "YSQ_33",
+          question: "خیلی مهم است که جلب توجه و تحسین کنم.",
+          type: "likert",
+          options: [
+            "کاملاً نادرست",
+            "نادرست",
+            "تا حدی نادرست",
+            "تا حدی درست",
+            "درست",
+            "کاملاً درست"
+          ],
+          scale: [1, 2, 3, 4, 5, 6],
+          category: "طرحواره_جویای_تحسین",
+          domain: "جهت‌گیری_به_سوی_دیگران"
+        },
+        {
+          id: "YSQ_34",
+          question: "پول و موقعیت اجتماعی برایم خیلی مهم است.",
+          type: "likert",
+          options: [
+            "کاملاً نادرست",
+            "نادرست",
+            "تا حدی نادرست",
+            "تا حدی درست",
+            "درست",
+            "کاملاً درست"
+          ],
+          scale: [1, 2, 3, 4, 5, 6],
+          category: "طرحواره_جویای_تحسین",
+          domain: "جهت‌گیری_به_سوی_دیگران"
+        },
+        {
+          id: "YSQ_35",
+          question:
+            "اگر نتوانم اهدافم را محقق کنم، به راحتی عصبانی و بی‌حوصله می‌شوم.",
+          type: "likert",
+          options: [
+            "کاملاً نادرست",
+            "نادرست",
+            "تا حدی نادرست",
+            "تا حدی درست",
+            "درست",
+            "کاملاً درست"
+          ],
+          scale: [1, 2, 3, 4, 5, 6],
+          category: "طرحواره_خودکنترلی_ناکافی",
+          domain: "محدودیت‌های_مختل"
+        },
+        {
+          id: "YSQ_36",
+          question: "در کنترل خودم و رعایت نظم مشکل دارم.",
+          type: "likert",
+          options: [
+            "کاملاً نادرست",
+            "نادرست",
+            "تا حدی نادرست",
+            "تا حدی درست",
+            "درست",
+            "کاملاً درست"
+          ],
+          scale: [1, 2, 3, 4, 5, 6],
+          category: "طرحواره_خودکنترلی_ناکافی",
+          domain: "محدودیت‌های_مختل"
+        },
+        {
+          id: "YSQ_37",
+          question: "احساس می‌کنم که قوانین و مقررات برای من اعمال نمی‌شود.",
+          type: "likert",
+          options: [
+            "کاملاً نادرست",
+            "نادرست",
+            "تا حدی نادرست",
+            "تا حدی درست",
+            "درست",
+            "کاملاً درست"
+          ],
+          scale: [1, 2, 3, 4, 5, 6],
+          category: "طرحواره_حق_طلبی",
+          domain: "محدودیت‌های_مختل"
+        },
+        {
+          id: "YSQ_38",
+          question:
+            "مشکل در تشخیص اینکه چگونه احساس می‌کنم و چه می‌خواهم، دارم.",
+          type: "likert",
+          options: [
+            "کاملاً نادرست",
+            "نادرست",
+            "تا حدی نادرست",
+            "تا حدی درست",
+            "درست",
+            "کاملاً درست"
+          ],
+          scale: [1, 2, 3, 4, 5, 6],
+          category: "طرحواره_خودکامگی",
+          domain: "خودگردانی_و_عملکرد_مختل"
+        },
+        {
+          id: "YSQ_39",
+          question: "احساس می‌کنم که تمام مسئولیت‌ها بر عهده من است.",
+          type: "likert",
+          options: [
+            "کاملاً نادرست",
+            "نادرست",
+            "تا حدی نادرست",
+            "تا حدی درست",
+            "درست",
+            "کاملاً درست"
+          ],
+          scale: [1, 2, 3, 4, 5, 6],
+          category: "طرحواره_معیارهای_سرسختانه",
+          domain: "هوشیاری_بیش_از_حد_و_بازداری"
+        },
+        {
+          id: "YSQ_40",
+          question: "مردم فکر می‌کنند که من خیلی کنترل‌گر و کمال‌طلب هستم.",
+          type: "likert",
+          options: [
+            "کاملاً نادرست",
+            "نادرست",
+            "تا حدی نادرست",
+            "تا حدی درست",
+            "درست",
+            "کاملاً درست"
+          ],
+          scale: [1, 2, 3, 4, 5, 6],
+          category: "طرحواره_معیارهای_سرسختانه",
+          domain: "هوشیاری_بیش_از_حد_و_بازداری"
+        },
+        {
+          id: "YSQ_41",
+          question: "اگر اشتباه کنم، خودم را سخت سرزنش می‌کنم.",
+          type: "likert",
+          options: [
+            "کاملاً نادرست",
+            "نادرست",
+            "تا حدی نادرست",
+            "تا حدی درست",
+            "درست",
+            "کاملاً درست"
+          ],
+          scale: [1, 2, 3, 4, 5, 6],
+          category: "طرحواره_خودتنبیهی",
+          domain: "هوشیاری_بیش_از_حد_و_بازداری"
+        },
+        {
+          id: "YSQ_42",
+          question: "نسبت به ابراز عشق و محبت احساس خجالت می‌کنم.",
+          type: "likert",
+          options: [
+            "کاملاً نادرست",
+            "نادرست",
+            "تا حدی نادرست",
+            "تا حدی درست",
+            "درست",
+            "کاملاً درست"
+          ],
+          scale: [1, 2, 3, 4, 5, 6],
+          category: "طرحواره_بازداری_هیجانی",
+          domain: "هوشیاری_بیش_از_حد_و_بازداری"
+        },
+        {
+          id: "YSQ_43",
+          question:
+            "مردم انتظار دارند من کارهای زیادی انجام دهم و خودم را فدا کنم.",
+          type: "likert",
+          options: [
+            "کاملاً نادرست",
+            "نادرست",
+            "تا حدی نادرست",
+            "تا حدی درست",
+            "درست",
+            "کاملاً درست"
+          ],
+          scale: [1, 2, 3, 4, 5, 6],
+          category: "طرحواره_ایثار",
+          domain: "جهت‌گیری_به_سوی_دیگران"
+        },
+        {
+          id: "YSQ_44",
+          question:
+            "اگر از کاری که از من خواسته شده، سر باز زنم، احساس گناه می‌کنم.",
+          type: "likert",
+          options: [
+            "کاملاً نادرست",
+            "نادرست",
+            "تا حدی نادرست",
+            "تا حدی درست",
+            "درست",
+            "کاملاً درست"
+          ],
+          scale: [1, 2, 3, 4, 5, 6],
+          category: "طرحواره_تسلیم",
+          domain: "جهت‌گیری_به_سوی_دیگران"
+        },
+        {
+          id: "YSQ_45",
+          question: "برای جلب توجه دیگران تلاش زیادی می‌کنم.",
+          type: "likert",
+          options: [
+            "کاملاً نادرست",
+            "نادرست",
+            "تا حدی نادرست",
+            "تا حدی درست",
+            "درست",
+            "کاملاً درست"
+          ],
+          scale: [1, 2, 3, 4, 5, 6],
+          category: "طرحواره_جویای_تحسین",
+          domain: "جهت‌گیری_به_سوی_دیگران"
+        },
+        {
+          id: "YSQ_46",
+          question: "کنترل تمایلاتم برایم مشکل است.",
+          type: "likert",
+          options: [
+            "کاملاً نادرست",
+            "نادرست",
+            "تا حدی نادرست",
+            "تا حدی درست",
+            "درست",
+            "کاملاً درست"
+          ],
+          scale: [1, 2, 3, 4, 5, 6],
+          category: "طرحواره_خودکنترلی_ناکافی",
+          domain: "محدودیت‌های_مختل"
+        },
+        {
+          id: "YSQ_47",
+          question: "همیشه واقعه‌ها را به بدترین شکل تعبیر می‌کنم.",
+          type: "likert",
+          options: [
+            "کاملاً نادرست",
+            "نادرست",
+            "تا حدی نادرست",
+            "تا حدی درست",
+            "درست",
+            "کاملاً درست"
+          ],
+          scale: [1, 2, 3, 4, 5, 6],
+          category: "طرحواره_بدبینی",
+          domain: "هوشیاری_بیش_از_حد_و_بازداری"
+        },
+        {
+          id: "YSQ_48",
+          question:
+            "سعی می‌کنم از هر چیز جلوگیری کنم که ممکن است اشتباه پیش برود.",
+          type: "likert",
+          options: [
+            "کاملاً نادرست",
+            "نادرست",
+            "تا حدی نادرست",
+            "تا حدی درست",
+            "درست",
+            "کاملاً درست"
+          ],
+          scale: [1, 2, 3, 4, 5, 6],
+          category: "طرحواره_بدبینی",
+          domain: "هوشیاری_بیش_از_حد_و_بازداری"
+        },
+        {
+          id: "YSQ_49",
+          question:
+            "اگر تصمیم بگیرم کاری را انجام دهم، حتی اگر دیگران مخالف باشند، آن را انجام می‌دهم.",
+          type: "likert",
+          options: [
+            "کاملاً نادرست",
+            "نادرست",
+            "تا حدی نادرست",
+            "تا حدی درست",
+            "درست",
+            "کاملاً درست"
+          ],
+          scale: [1, 2, 3, 4, 5, 6],
+          category: "طرحواره_حق_طلبی",
+          domain: "محدودیت‌های_مختل"
+        },
+        {
+          id: "YSQ_50",
+          question:
+            "در دوستی‌های نزدیک، طرف مقابل همیشه می‌خواهد بیش از آنچه می‌دهد، بگیرد.",
+          type: "likert",
+          options: [
+            "کاملاً نادرست",
+            "نادرست",
+            "تا حدی نادرست",
+            "تا حدی درست",
+            "درست",
+            "کاملاً درست"
+          ],
+          scale: [1, 2, 3, 4, 5, 6],
+          category: "طرحواره_بی_اعتمادی",
+          domain: "جدایی_و_طرد"
+        },
+        {
+          id: "YSQ_51",
+          question: "احساس می‌کنم مردم از من سوءاستفاده می‌کنند.",
+          type: "likert",
+          options: [
+            "کاملاً نادرست",
+            "نادرست",
+            "تا حدی نادرست",
+            "تا حدی درست",
+            "درست",
+            "کاملاً درست"
+          ],
+          scale: [1, 2, 3, 4, 5, 6],
+          category: "طرحواره_بی_اعتمادی",
+          domain: "جدایی_و_طرد"
+        },
+        {
+          id: "YSQ_52",
+          question: "مواظب هستم که مردم انگیزه‌های واقعی‌شان را پنهان نکنند.",
+          type: "likert",
+          options: [
+            "کاملاً نادرست",
+            "نادرست",
+            "تا حدی نادرست",
+            "تا حدی درست",
+            "درست",
+            "کاملاً درست"
+          ],
+          scale: [1, 2, 3, 4, 5, 6],
+          category: "طرحواره_بی_اعتمادی",
+          domain: "جدایی_و_طرد"
+        },
+        {
+          id: "YSQ_53",
+          question:
+            "حتی وقتی همه چیز خوب پیش می‌رود، احساس می‌کنم این وضعیت دوام نخواهد آورد.",
+          type: "likert",
+          options: [
+            "کاملاً نادرست",
+            "نادرست",
+            "تا حدی نادرست",
+            "تا حدی درست",
+            "درست",
+            "کاملاً درست"
+          ],
+          scale: [1, 2, 3, 4, 5, 6],
+          category: "طرحواره_بدبینی",
+          domain: "هوشیاری_بیش_از_حد_و_بازداری"
+        },
+        {
+          id: "YSQ_54",
+          question:
+            "اگر کسی با من خوب رفتار کند، به نگرانی می‌افتم که قطعاً چیز پنهانی می‌خواهد.",
+          type: "likert",
+          options: [
+            "کاملاً نادرست",
+            "نادرست",
+            "تا حدی نادرست",
+            "تا حدی درست",
+            "درست",
+            "کاملاً درست"
+          ],
+          scale: [1, 2, 3, 4, 5, 6],
+          category: "طرحواره_بی_اعتمادی",
+          domain: "جدایی_و_طرد"
+        },
+        {
+          id: "YSQ_55",
+          question:
+            "از کودکی کسی مراقبم نبوده، راهنماییم نکرده یا به من جهت نداده است.",
+          type: "likert",
+          options: [
+            "کاملاً نادرست",
+            "نادرست",
+            "تا حدی نادرست",
+            "تا حدی درست",
+            "درست",
+            "کاملاً درست"
+          ],
+          scale: [1, 2, 3, 4, 5, 6],
+          category: "طرحواره_محرومیت_هیجانی",
+          domain: "جدایی_و_طرد"
+        },
+        {
+          id: "YSQ_56",
+          question:
+            "بیشتر اوقات احساس می‌کنم کسی واقعاً نمی‌فهمد که چه احساسی دارم.",
+          type: "likert",
+          options: [
+            "کاملاً نادرست",
+            "نادرست",
+            "تا حدی نادرست",
+            "تا حدی درست",
+            "درست",
+            "کاملاً درست"
+          ],
+          scale: [1, 2, 3, 4, 5, 6],
+          category: "طرحواره_محرومیت_هیجانی",
+          domain: "جدایی_و_طرد"
+        },
+        {
+          id: "YSQ_57",
+          question:
+            "وقتی اشتباهی انجام دهم، احساس می‌کنم که شایسته بخشیده شدن نیستم.",
+          type: "likert",
+          options: [
+            "کاملاً نادرست",
+            "نادرست",
+            "تا حدی نادرست",
+            "تا حدی درست",
+            "درست",
+            "کاملاً درست"
+          ],
+          scale: [1, 2, 3, 4, 5, 6],
+          category: "طرحواره_شرم",
+          domain: "جدایی_و_طرد"
+        },
+        {
+          id: "YSQ_58",
+          question:
+            "به نظر من هیچ‌کس آنقدر که من برایش مهم هستم، من برایش مهم نیستم.",
+          type: "likert",
+          options: [
+            "کاملاً نادرست",
+            "نادرست",
+            "تا حدی نادرست",
+            "تا حدی درست",
+            "درست",
+            "کاملاً درست"
+          ],
+          scale: [1, 2, 3, 4, 5, 6],
+          category: "طرحواره_محرومیت_هیجانی",
+          domain: "جدایی_و_طرد"
+        },
+        {
+          id: "YSQ_59",
+          question:
+            "وقتی احساس می‌کنم کسی که دوستش دارم به من علاقه‌ای نشان نمی‌دهد، احساس تنهایی و پوچی می‌کنم.",
+          type: "likert",
+          options: [
+            "کاملاً نادرست",
+            "نادرست",
+            "تا حدی نادرست",
+            "تا حدی درست",
+            "درست",
+            "کاملاً درست"
+          ],
+          scale: [1, 2, 3, 4, 5, 6],
+          category: "طرحواره_ترک_شدگی",
+          domain: "جدایی_و_طرد"
+        },
+        {
+          id: "YSQ_60",
+          question:
+            "در بسیاری از موقعیت‌ها نگرانم که افراد نزدیک به من مرا ترک کنند.",
+          type: "likert",
+          options: [
+            "کاملاً نادرست",
+            "نادرست",
+            "تا حدی نادرست",
+            "تا حدی درست",
+            "درست",
+            "کاملاً درست"
+          ],
+          scale: [1, 2, 3, 4, 5, 6],
+          category: "طرحواره_ترک_شدگی",
+          domain: "جدایی_و_طرد"
+        },
+        {
+          id: "YSQ_61",
+          question:
+            "نیاز دارم که دیگران آنقدر به من نزدیک باشند که نتوانم بدون آن‌ها زندگی کنم.",
+          type: "likert",
+          options: [
+            "کاملاً نادرست",
+            "نادرست",
+            "تا حدی نادرست",
+            "تا حدی درست",
+            "درست",
+            "کاملاً درست"
+          ],
+          scale: [1, 2, 3, 4, 5, 6],
+          category: "طرحواره_وابستگی",
+          domain: "خودگردانی_و_عملکرد_مختل"
+        },
+        {
+          id: "YSQ_62",
+          question: "احساس می‌کنم که در زندگی روزمره بی‌کفایت هستم.",
+          type: "likert",
+          options: [
+            "کاملاً نادرست",
+            "نادرست",
+            "تا حدی نادرست",
+            "تا حدی درست",
+            "درست",
+            "کاملاً درست"
+          ],
+          scale: [1, 2, 3, 4, 5, 6],
+          category: "طرحواره_وابستگی",
+          domain: "خودگردانی_و_عملکرد_مختل"
+        },
+        {
+          id: "YSQ_63",
+          question: "خود را فردی می‌دانم که بر زندگی‌اش تسلط ندارد.",
+          type: "likert",
+          options: [
+            "کاملاً نادرست",
+            "نادرست",
+            "تا حدی نادرست",
+            "تا حدی درست",
+            "درست",
+            "کاملاً درست"
+          ],
+          scale: [1, 2, 3, 4, 5, 6],
+          category: "طرحواره_شکست",
+          domain: "خودگردانی_و_عملکرد_مختل"
+        },
+        {
+          id: "YSQ_64",
+          question:
+            "در مقایسه با دیگران، احساس می‌کنم به لحاظ کاری موفق نیستم.",
+          type: "likert",
+          options: [
+            "کاملاً نادرست",
+            "نادرست",
+            "تا حدی نادرست",
+            "تا حدی درست",
+            "درست",
+            "کاملاً درست"
+          ],
+          scale: [1, 2, 3, 4, 5, 6],
+          category: "طرحواره_شکست",
+          domain: "خودگردانی_و_عملکرد_مختل"
+        },
+        {
+          id: "YSQ_65",
+          question: "احساس می‌کنم که آنچه برای ارائه دادن دارم، ارزشی ندارد.",
+          type: "likert",
+          options: [
+            "کاملاً نادرست",
+            "نادرست",
+            "تا حدی نادرست",
+            "تا حدی درست",
+            "درست",
+            "کاملاً درست"
+          ],
+          scale: [1, 2, 3, 4, 5, 6],
+          category: "طرحواره_نقص",
+          domain: "جدایی_و_طرد"
+        },
+        {
+          id: "YSQ_66",
+          question: "احساس می‌کنم که از نظر اجتماعی، نامطلوب هستم.",
+          type: "likert",
+          options: [
+            "کاملاً نادرست",
+            "نادرست",
+            "تا حدی نادرست",
+            "تا حدی درست",
+            "درست",
+            "کاملاً درست"
+          ],
+          scale: [1, 2, 3, 4, 5, 6],
+          category: "طرحواره_نقص",
+          domain: "جدایی_و_طرد"
+        },
+        {
+          id: "YSQ_67",
+          question:
+            "از کودکی کسی مراقبم نبوده، راهنماییم نکرده یا به من جهت نداده است.",
+          type: "likert",
+          options: [
+            "کاملاً نادرست",
+            "نادرست",
+            "تا حدی نادرست",
+            "تا حدی درست",
+            "درست",
+            "کاملاً درست"
+          ],
+          scale: [1, 2, 3, 4, 5, 6],
+          category: "طرحواره_محرومیت_هیجانی",
+          domain: "جدایی_و_طرد"
+        },
+        {
+          id: "YSQ_68",
+          question:
+            "بیشتر اوقات احساس می‌کنم کسی واقعاً نمی‌فهمد که چه احساسی دارم.",
+          type: "likert",
+          options: [
+            "کاملاً نادرست",
+            "نادرست",
+            "تا حدی نادرست",
+            "تا حدی درست",
+            "درست",
+            "کاملاً درست"
+          ],
+          scale: [1, 2, 3, 4, 5, 6],
+          category: "طرحواره_محرومیت_هیجانی",
+          domain: "جدایی_و_طرد"
+        },
+        {
+          id: "YSQ_69",
+          question:
+            "وقتی اشتباهی انجام دهم، احساس می‌کنم که شایسته بخشیده شدن نیستم.",
+          type: "likert",
+          options: [
+            "کاملاً نادرست",
+            "نادرست",
+            "تا حدی نادرست",
+            "تا حدی درست",
+            "درست",
+            "کاملاً درست"
+          ],
+          scale: [1, 2, 3, 4, 5, 6],
+          category: "طرحواره_شرم",
+          domain: "جدایی_و_طرد"
+        },
+        {
+          id: "YSQ_70",
+          question:
+            "به نظر من هیچ‌کس آنقدر که من برایش مهم هستم، من برایش مهم نیستم.",
+          type: "likert",
+          options: [
+            "کاملاً نادرست",
+            "نادرست",
+            "تا حدی نادرست",
+            "تا حدی درست",
+            "درست",
+            "کاملاً درست"
+          ],
+          scale: [1, 2, 3, 4, 5, 6],
+          category: "طرحواره_محرومیت_هیجانی",
+          domain: "جدایی_و_طرد"
+        },
+        {
+          id: "YSQ_71",
+          question:
+            "وقتی احساس می‌کنم کسی که دوستش دارم به من علاقه‌ای نشان نمی‌دهد، احساس تنهایی و پوچی می‌کنم.",
+          type: "likert",
+          options: [
+            "کاملاً نادرست",
+            "نادرست",
+            "تا حدی نادرست",
+            "تا حدی درست",
+            "درست",
+            "کاملاً درست"
+          ],
+          scale: [1, 2, 3, 4, 5, 6],
+          category: "طرحواره_ترک_شدگی",
+          domain: "جدایی_و_طرد"
+        },
+        {
+          id: "YSQ_72",
+          question:
+            "در بسیاری از موقعیت‌ها نگرانم که افراد نزدیک به من مرا ترک کنند.",
+          type: "likert",
+          options: [
+            "کاملاً نادرست",
+            "نادرست",
+            "تا حدی نادرست",
+            "تا حدی درست",
+            "درست",
+            "کاملاً درست"
+          ],
+          scale: [1, 2, 3, 4, 5, 6],
+          category: "طرحواره_ترک_شدگی",
+          domain: "جدایی_و_طرد"
+        },
+        {
+          id: "YSQ_73",
+          question:
+            "نیاز دارم که دیگران آنقدر به من نزدیک باشند که نتوانم بدون آن‌ها زندگی کنم.",
+          type: "likert",
+          options: [
+            "کاملاً نادرست",
+            "نادرست",
+            "تا حدی نادرست",
+            "تا حدی درست",
+            "درست",
+            "کاملاً درست"
+          ],
+          scale: [1, 2, 3, 4, 5, 6],
+          category: "طرحواره_وابستگی",
+          domain: "خودگردانی_و_عملکرد_مختل"
+        },
+        {
+          id: "YSQ_74",
+          question: "احساس می‌کنم که در زندگی روزمره بی‌کفایت هستم.",
+          type: "likert",
+          options: [
+            "کاملاً نادرست",
+            "نادرست",
+            "تا حدی نادرست",
+            "تا حدی درست",
+            "درست",
+            "کاملاً درست"
+          ],
+          scale: [1, 2, 3, 4, 5, 6],
+          category: "طرحواره_وابستگی",
+          domain: "خودگردانی_و_عملکرد_مختل"
+        },
+        {
+          id: "YSQ_75",
+          question: "خود را فردی می‌دانم که بر زندگی‌اش تسلط ندارد.",
+          type: "likert",
+          options: [
+            "کاملاً نادرست",
+            "نادرست",
+            "تا حدی نادرست",
+            "تا حدی درست",
+            "درست",
+            "کاملاً درست"
+          ],
+          scale: [1, 2, 3, 4, 5, 6],
+          category: "طرحواره_شکست",
+          domain: "خودگردانی_و_عملکرد_مختل"
+        }
+      ];
 
+      // Function to render Likert scale questions dynamically
+      function renderLikertQuestions(questions, containerId, formName) {
+        const container = document.getElementById(containerId);
+        container.innerHTML = ""; // Clear previous content
 
-        // Function to render Likert scale questions dynamically
-        function renderLikertQuestions(questions, containerId, formName) {
-            const container = document.getElementById(containerId);
-            container.innerHTML = ''; // Clear previous content
-
-            questions.forEach((q, index) => {
-                const questionDiv = document.createElement('div');
-                questionDiv.className = 'mb-6 p-4 border border-gray-200 rounded-lg bg-white shadow-sm';
-                questionDiv.innerHTML = `
-                    <p class="text-lg font-medium text-gray-900 mb-3">${index + 1}. ${q.question}</p>
-                    <div class="flex flex-wrap justify-around gap-2" data-question-id="${q.id}" data-form-name="${formName}">
-                        ${q.options.map((option, i) => `
+        questions.forEach((q, index) => {
+          const questionDiv = document.createElement("div");
+          questionDiv.className =
+            "mb-6 p-4 border border-gray-200 rounded-lg bg-white shadow-sm";
+          questionDiv.innerHTML = `
+                    <p class="text-lg font-medium text-gray-900 mb-3">${
+                      index + 1
+                    }. ${q.question}</p>
+                    <div class="flex flex-wrap justify-around gap-2" data-question-id="${
+                      q.id
+                    }" data-form-name="${formName}">
+                        ${q.options
+                          .map(
+                            (option, i) => `
                             <button type="button"
                                 class="likert-option flex-1 min-w-[100px] sm:min-w-[120px] px-4 py-2 border border-gray-300 rounded-md text-gray-700 text-sm sm:text-base hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
                                 data-value="${q.scale[i]}">
                                 ${option}
                             </button>
-                        `).join('')}
+                        `
+                          )
+                          .join("")}
                     </div>
                 `;
-                container.appendChild(questionDiv);
-            });
-
-            // Add event listeners for option selection
-            container.querySelectorAll('.likert-option').forEach(button => {
-                button.addEventListener('click', (event) => {
-                    const parentDiv = event.target.closest('.flex');
-                    if (parentDiv) {
-                        // Remove 'selected' class from all siblings
-                        Array.from(parentDiv.children).forEach(btn => {
-                            btn.classList.remove('selected');
-                        });
-                        // Add 'selected' class to the clicked button
-                        event.target.classList.add('selected');
-                    }
-                });
-            });
-        }
-
-        // Function to collect answers from a form section
-        function collectFormAnswers(containerId) {
-            const container = document.getElementById(containerId);
-            const answers = {};
-            let allQuestionsAnswered = true;
-
-            container.querySelectorAll('.flex[data-question-id]').forEach(questionContainer => {
-                const questionId = questionContainer.dataset.questionId;
-                const selectedOption = questionContainer.querySelector('.likert-option.selected');
-
-                // Remove previous error highlighting
-                questionContainer.closest('.mb-6').classList.remove('border-red-500', 'border-2');
-
-                if (selectedOption) {
-                    answers[questionId] = parseInt(selectedOption.dataset.value);
-                } else {
-                    allQuestionsAnswered = false;
-                    // Highlight unanswered questions
-                    questionContainer.closest('.mb-6').classList.add('border-red-500', 'border-2');
-                }
-            });
-            return { answers, allQuestionsAnswered };
-        }
-
-        // Event listener for the main submit button
-        document.getElementById('submit-all-forms').addEventListener('click', async () => {
-            if (!userId) {
-                showModal("لطفاً منتظر بمانید تا احراز هویت انجام شود. اگر مشکل ادامه داشت، صفحه را رفرش کنید.");
-                return;
-            }
-
-            // Collect demographic data
-            const age = document.getElementById('age').value;
-            const gender = document.getElementById('gender').value;
-            const education = document.getElementById('education').value;
-            const occupation = document.getElementById('occupation').value;
-
-            // Basic validation for demographic fields
-            if (!age || !gender || !education || !occupation) {
-                showModal("لطفاً تمام اطلاعات دموگرافیک را پر کنید.");
-                // Optionally highlight demographic fields
-                document.getElementById('age').classList.add('border-red-500');
-                document.getElementById('gender').classList.add('border-red-500');
-                document.getElementById('education').classList.add('border-red-500');
-                document.getElementById('occupation').classList.add('border-red-500');
-                return;
-            } else {
-                 // Remove error highlighting if fields are filled
-                document.getElementById('age').classList.remove('border-red-500');
-                document.getElementById('gender').classList.remove('border-red-500');
-                document.getElementById('education').classList.remove('border-red-500');
-                document.getElementById('occupation').classList.remove('border-red-500');
-            }
-
-
-            // Collect answers from MBI and YSQ forms
-            const mbiResults = collectFormAnswers('mbi-form-section');
-            const ysqResults = collectFormAnswers('ysq-form-section');
-
-            // Check if all questions were answered
-            if (!mbiResults.allQuestionsAnswered || !ysqResults.allQuestionsAnswered) {
-                showModal("لطفاً به تمام سوالات پاسخ دهید. سوالات پاسخ داده نشده با کادر قرمز مشخص شده‌اند.");
-                return;
-            }
-
-            // Prepare data for submission
-            const submissionData = {
-                userId: userId,
-                demographics: {
-                    age: parseInt(age),
-                    gender: gender,
-                    education: education,
-                    occupation: occupation
-                },
-                mbiAnswers: mbiResults.answers,
-                ysqAnswers: ysqResults.answers,
-                timestamp: serverTimestamp() // Firestore server timestamp for accurate time
-            };
-
-            try {
-                // Store data in a public collection in Firestore
-                // The document ID is set to the userId, meaning each user can only have one submission
-                // If you want multiple submissions per user, you would use addDoc(submissionsCollectionRef, submissionData);
-                const submissionsCollectionRef = collection(db, `artifacts/${appId}/public/data/formSubmissions`);
-                await setDoc(doc(submissionsCollectionRef, userId), submissionData);
-                showModal("فرم‌ها با موفقیت ارسال شدند!");
-                console.log("Document written with ID: ", userId);
-            } catch (e) {
-                console.error("Error adding document: ", e);
-                showModal("خطا در ارسال فرم‌ها. لطفاً دوباره تلاش کنید.");
-            }
+          container.appendChild(questionDiv);
         });
 
-        // Function to set up a real-time listener for results from Firestore
-        function setupResultsListener() {
-            if (!db || !userId) {
-                console.log("Firestore or userId not ready for results listener.");
-                return;
+        // Add event listeners for option selection
+        container.querySelectorAll(".likert-option").forEach(button => {
+          button.addEventListener("click", event => {
+            const parentDiv = event.target.closest(".flex");
+            if (parentDiv) {
+              // Remove 'selected' class from all siblings
+              Array.from(parentDiv.children).forEach(btn => {
+                btn.classList.remove("selected");
+              });
+              // Add 'selected' class to the clicked button
+              event.target.classList.add("selected");
+            }
+          });
+        });
+      }
+
+      // Function to collect answers from a form section
+      function collectFormAnswers(containerId) {
+        const container = document.getElementById(containerId);
+        const answers = {};
+        let allQuestionsAnswered = true;
+
+        container
+          .querySelectorAll(".flex[data-question-id]")
+          .forEach(questionContainer => {
+            const questionId = questionContainer.dataset.questionId;
+            const selectedOption = questionContainer.querySelector(
+              ".likert-option.selected"
+            );
+
+            // Remove previous error highlighting
+            questionContainer
+              .closest(".mb-6")
+              .classList.remove("border-red-500", "border-2");
+
+            if (selectedOption) {
+              answers[questionId] = parseInt(selectedOption.dataset.value);
+            } else {
+              allQuestionsAnswered = false;
+              // Highlight unanswered questions
+              questionContainer
+                .closest(".mb-6")
+                .classList.add("border-red-500", "border-2");
+            }
+          });
+        return { answers, allQuestionsAnswered };
+      }
+
+      // Event listener for the main submit button
+      document
+        .getElementById("submit-all-forms")
+        .addEventListener("click", async () => {
+          if (!userId) {
+            showModal(
+              "لطفاً منتظر بمانید تا احراز هویت انجام شود. اگر مشکل ادامه داشت، صفحه را رفرش کنید."
+            );
+            return;
+          }
+
+          // Collect demographic data
+          const age = document.getElementById("age").value;
+          const gender = document.getElementById("gender").value;
+          const education = document.getElementById("education").value;
+          const occupation = document.getElementById("occupation").value;
+
+          // Basic validation for demographic fields
+          if (!age || !gender || !education || !occupation) {
+            showModal("لطفاً تمام اطلاعات دموگرافیک را پر کنید.");
+            // Optionally highlight demographic fields
+            document.getElementById("age").classList.add("border-red-500");
+            document.getElementById("gender").classList.add("border-red-500");
+            document
+              .getElementById("education")
+              .classList.add("border-red-500");
+            document
+              .getElementById("occupation")
+              .classList.add("border-red-500");
+            return;
+          } else {
+            // Remove error highlighting if fields are filled
+            document.getElementById("age").classList.remove("border-red-500");
+            document
+              .getElementById("gender")
+              .classList.remove("border-red-500");
+            document
+              .getElementById("education")
+              .classList.remove("border-red-500");
+            document
+              .getElementById("occupation")
+              .classList.remove("border-red-500");
+          }
+
+          // Collect answers from MBI and YSQ forms
+          const mbiResults = collectFormAnswers("mbi-form-section");
+          const ysqResults = collectFormAnswers("ysq-form-section");
+
+          // Check if all questions were answered
+          if (
+            !mbiResults.allQuestionsAnswered ||
+            !ysqResults.allQuestionsAnswered
+          ) {
+            showModal(
+              "لطفاً به تمام سوالات پاسخ دهید. سوالات پاسخ داده نشده با کادر قرمز مشخص شده‌اند."
+            );
+            return;
+          }
+
+          // Prepare data for submission
+          const submissionData = {
+            userId: userId,
+            demographics: {
+              age: parseInt(age),
+              gender: gender,
+              education: education,
+              occupation: occupation
+            },
+            mbiAnswers: mbiResults.answers,
+            ysqAnswers: ysqResults.answers,
+            timestamp: serverTimestamp() // Firestore server timestamp for accurate time
+          };
+
+          try {
+            // Store data in a public collection in Firestore
+            // The document ID is set to the userId, meaning each user can only have one submission
+            // If you want multiple submissions per user, you would use addDoc(submissionsCollectionRef, submissionData);
+            const submissionsCollectionRef = collection(
+              db,
+              `artifacts/${appId}/public/data/formSubmissions`
+            );
+            await setDoc(doc(submissionsCollectionRef, userId), submissionData);
+            showModal("فرم‌ها با موفقیت ارسال شدند!");
+            console.log("Document written with ID: ", userId);
+          } catch (e) {
+            console.error("Error adding document: ", e);
+            showModal("خطا در ارسال فرم‌ها. لطفاً دوباره تلاش کنید.");
+          }
+        });
+
+      // Function to set up a real-time listener for results from Firestore
+      function setupResultsListener() {
+        if (!db || !userId) {
+          console.log("Firestore or userId not ready for results listener.");
+          return;
+        }
+
+        const resultsDisplay = document.getElementById("results-display");
+        const submissionsCollectionRef = collection(
+          db,
+          `artifacts/${appId}/public/data/formSubmissions`
+        );
+        const q = query(submissionsCollectionRef); // Query to get all submissions
+
+        // Listen for real-time updates
+        onSnapshot(
+          q,
+          snapshot => {
+            resultsDisplay.innerHTML = ""; // Clear previous results
+            if (snapshot.empty) {
+              resultsDisplay.innerHTML =
+                '<p class="text-center text-gray-500">هیچ نتیجه‌ای هنوز ارسال نشده است.</p>';
+              return;
             }
 
-            const resultsDisplay = document.getElementById('results-display');
-            const submissionsCollectionRef = collection(db, `artifacts/${appId}/public/data/formSubmissions`);
-            const q = query(submissionsCollectionRef); // Query to get all submissions
-
-            // Listen for real-time updates
-            onSnapshot(q, (snapshot) => {
-                resultsDisplay.innerHTML = ''; // Clear previous results
-                if (snapshot.empty) {
-                    resultsDisplay.innerHTML = '<p class="text-center text-gray-500">هیچ نتیجه‌ای هنوز ارسال نشده است.</p>';
-                    return;
-                }
-
-                snapshot.forEach((doc) => {
-                    const data = doc.data();
-                    const resultItem = document.createElement('div');
-                    resultItem.className = 'p-4 border border-gray-300 rounded-lg bg-white shadow-sm mb-4';
-                    resultItem.innerHTML = `
-                        <p class="font-bold text-lg text-blue-700">شناسه کاربر: ${data.userId}</p>
-                        <p class="text-gray-700"><strong>زمان ارسال:</strong> ${data.timestamp ? new Date(data.timestamp.toDate()).toLocaleString('fa-IR') : 'نامشخص'}</p>
+            snapshot.forEach(doc => {
+              const data = doc.data();
+              const resultItem = document.createElement("div");
+              resultItem.className =
+                "p-4 border border-gray-300 rounded-lg bg-white shadow-sm mb-4";
+              resultItem.innerHTML = `
+                        <p class="font-bold text-lg text-blue-700">شناسه کاربر: ${
+                          data.userId
+                        }</p>
+                        <p class="text-gray-700"><strong>زمان ارسال:</strong> ${
+                          data.timestamp
+                            ? new Date(data.timestamp.toDate()).toLocaleString(
+                                "fa-IR"
+                              )
+                            : "نامشخص"
+                        }</p>
                         <h3 class="font-semibold text-md mt-2">اطلاعات دموگرافیک:</h3>
                         <ul class="list-disc list-inside text-gray-600">
-                            <li>سن: ${data.demographics?.age || 'نامشخص'}</li>
-                            <li>جنسیت: ${data.demographics?.gender || 'نامشخص'}</li>
-                            <li>تحصیلات: ${data.demographics?.education || 'نامشخص'}</li>
-                            <li>شغل: ${data.demographics?.occupation || 'نامشخص'}</li>
+                            <li>سن: ${data.demographics?.age || "نامشخص"}</li>
+                            <li>جنسیت: ${
+                              data.demographics?.gender || "نامشخص"
+                            }</li>
+                            <li>تحصیلات: ${
+                              data.demographics?.education || "نامشخص"
+                            }</li>
+                            <li>شغل: ${
+                              data.demographics?.occupation || "نامشخص"
+                            }</li>
                         </ul>
                         <h3 class="font-semibold text-md mt-2">پاسخ‌های MBI:</h3>
                         <ul class="list-disc list-inside text-gray-600">
-                            ${Object.entries(data.mbiAnswers || {}).map(([id, value]) => `<li>${id}: ${value}</li>`).join('')}
+                            ${Object.entries(data.mbiAnswers || {})
+                              .map(([id, value]) => `<li>${id}: ${value}</li>`)
+                              .join("")}
                         </ul>
                         <h3 class="font-semibold text-md mt-2">پاسخ‌های YSQ:</h3>
                         <ul class="list-disc list-inside text-gray-600">
-                            ${Object.entries(data.ysqAnswers || {}).map(([id, value]) => `<li>${id}: ${value}</li>`).join('')}
+                            ${Object.entries(data.ysqAnswers || {})
+                              .map(([id, value]) => `<li>${id}: ${value}</li>`)
+                              .join("")}
                         </ul>
                     `;
-                    resultsDisplay.appendChild(resultItem);
-                });
-            }, (error) => {
-                console.error("Error listening to Firestore results:", error);
-                showModal("خطا در بارگذاری نتایج. لطفاً صفحه را رفرش کنید.");
+              resultsDisplay.appendChild(resultItem);
             });
-        }
+          },
+          error => {
+            console.error("Error listening to Firestore results:", error);
+            showModal("خطا در بارگذاری نتایج. لطفاً صفحه را رفرش کنید.");
+          }
+        );
+      }
 
-        // Initial rendering of forms and Firebase initialization when the window loads
-        window.onload = () => {
-            renderLikertQuestions(mbiQuestions, 'mbi-form-section', 'MBI');
-            renderLikertQuestions(ysqQuestions, 'ysq-form-section', 'YSQ');
-            initializeFirebase();
-        };
+      // Initial rendering of forms and Firebase initialization when the window loads
+      window.onload = () => {
+        renderLikertQuestions(mbiQuestions, "mbi-form-section", "MBI");
+        renderLikertQuestions(ysqQuestions, "ysq-form-section", "YSQ");
+        initializeFirebase();
+      };
     </script>
-</body>
+  </body>
 </html>
