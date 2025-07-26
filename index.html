@@ -153,16 +153,16 @@
         // Global variables for Firebase config and app ID
         // These variables are provided by the Canvas environment.
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-        const firebaseConfig = const firebaseConfig = {
-  apiKey: "AIzaSyC0uJzxWrejhRrMHKc-HqDEXDUcjpF0w6Q",
-  authDomain: "questionnaire-4827b.firebaseapp.com",
-  projectId: "questionnaire-4827b",
-  storageBucket: "questionnaire-4827b.firebasestorage.app",
-  messagingSenderId: "431810930724",
-  appId: "1:431810930724:web:9fae53c798bd9b2dd050b1",
-  measurementId: "G-HCG9K9HFNG"
-};
-;
+        const firebaseConfig = {
+            apiKey: "AIzaSyC0uJzxWrejhRrMHKc-HqDEXDUcjpF0w6Q",
+            authDomain: "questionnaire-4827b.firebaseapp.com",
+            projectId: "questionnaire-4827b",
+            storageBucket: "questionnaire-4827b.firebasestorage.app",
+            messagingSenderId: "431810930724",
+            appId: "1:431810930724:web:9fae53c798bd9b2dd050b1",
+            measurementId: "G-HCG9K9HFNG"
+            };
+
         const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
 
         let app, db, auth, userId;
