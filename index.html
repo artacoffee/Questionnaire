@@ -119,6 +119,37 @@
               <option value="other">دیگر</option>
             </select>
           </div>
+          <div>
+            <label
+              for="maritalStatus"
+              class="block text-gray-700 text-lg font-medium mb-2"
+              >وضعیت تأهل:</label
+            >
+            <select
+              id="maritalStatus"
+              class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-lg"
+            >
+              <option value="">انتخاب کنید</option>
+              <option value="single">مجرد</option>
+              <option value="married">متأهل</option>
+              <option value="divorced">مطلقه</option>
+              <option value="widowed">بیوه</option>
+            </select>
+          </div>
+          <div>
+            <label
+              for="childrenCount"
+              class="block text-gray-700 text-lg font-medium mb-2"
+              >تعداد فرزندان:</label
+            >
+            <input
+              type="number"
+              id="childrenCount"
+              min="0"
+              class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-lg"
+              placeholder="تعداد فرزندان"
+            />
+          </div>
         </div>
         <div class="mb-6">
           <label
@@ -126,12 +157,17 @@
             class="block text-gray-700 text-lg font-medium mb-2"
             >تحصیلات:</label
           >
-          <input
-            type="text"
+          <select
             id="education"
             class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-lg"
-            placeholder="میزان تحصیلات خود را وارد کنید"
-          />
+          >
+            <option value="">انتخاب کنید</option>
+            <option value="diploma">دیپلم</option>
+            <option value="associate">فوق دیپلم</option>
+            <option value="bachelor">کارشناسی</option>
+            <option value="master">کارشناسی ارشد</option>
+            <option value="phd">دکترا و بالاتر</option>
+          </select>
         </div>
         <div class="mb-6">
           <label
@@ -144,6 +180,33 @@
             id="occupation"
             class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-lg"
             placeholder="شغل خود را وارد کنید"
+          />
+        </div>
+        <div class="mb-6">
+          <label
+            for="incomeLevel"
+            class="block text-gray-700 text-lg font-medium mb-2"
+            >سطح درآمد (ماهانه به تومان):</label
+          >
+          <select
+            id="incomeLevel"
+            class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-lg"
+          >
+            <option value="">انتخاب کنید</option>
+            <option value="low">کمتر از ۱۵ میلیون</option>
+            <option value="medium">۱۵ تا ۳۰ میلیون</option>
+            <option value="high">بیشتر از ۳۰ میلیون</option>
+          </select>
+        </div>
+        <div class="mb-6">
+          <label for="city" class="block text-gray-700 text-lg font-medium mb-2"
+            >شهر محل سکونت:</label
+          >
+          <input
+            type="text"
+            id="city"
+            class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-lg"
+            placeholder="شهر خود را وارد کنید"
           />
         </div>
       </div>
@@ -168,6 +231,17 @@
           فرم YSQ
         </h2>
         <!-- YSQ questions will be dynamically inserted here -->
+      </div>
+
+      <!-- Migration Form Section -->
+      <div
+        id="migration-form-section"
+        class="mb-12 p-6 bg-yellow-50 rounded-lg shadow-inner"
+      >
+        <h2 class="text-2xl font-semibold text-yellow-800 mb-6 text-center">
+          پرسشنامه تمایل به مهاجرت
+        </h2>
+        <!-- Migration questions will be dynamically inserted here -->
       </div>
 
       <div class="text-center">
@@ -226,10 +300,7 @@
         serverTimestamp
       } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-      // Global variables for Firebase config and app ID
-      // These variables are provided by the Canvas environment.
-      // Your actual Firebase configuration from your project
-
+      // **IMPORTANT: Replace these placeholder values with your actual Firebase project configuration.**
       const firebaseConfig = {
         apiKey: "AIzaSyC0uJzxWrejhRrMHKc-HqDEXDUcjpF0w6Q",
         authDomain: "questionnaire-4827b.firebaseapp.com",
@@ -237,76 +308,55 @@
         storageBucket: "questionnaire-4827b.firebasestorage.app",
         messagingSenderId: "431810930724",
         appId: "1:431810930724:web:9fae53c798bd9b2dd050b1",
-        measurementId: "G-HCG9K9HFNG" // This line is optional if you don't use Analytics
+        measurementId: "G-HCG9K9HFNG" // Optional, remove if not using Analytics
       };
 
-      // Use your Firebase projectId as the appId for the Firestore collection path.
-      // This is crucial for the Firestore security rules to match correctly.
       const appId = firebaseConfig.projectId;
-
-      // initialAuthToken is not used when deploying to GitHub Pages, so set it to null.
       const initialAuthToken = null;
       let app, db, auth, userId;
 
-      // Function to show custom modal messages
       function showModal(message) {
         const modal = document.getElementById("myModal");
         const modalMessage = document.getElementById("modalMessage");
         modalMessage.textContent = message;
-        modal.style.display = "flex"; // Use flex to center content
+        modal.style.display = "flex";
       }
 
-      // Function to close custom modal
       function closeModal() {
         const modal = document.getElementById("myModal");
         modal.style.display = "none";
       }
 
-      // Event listeners for modal close button and outside click
       document
         .getElementById("closeModalBtn")
         .addEventListener("click", closeModal);
       window.addEventListener("click", event => {
-        const modal = document.getElementById("myModal");
-        if (event.target == modal) {
+        if (event.target == document.getElementById("myModal")) {
           closeModal();
         }
       });
 
-      // Initialize Firebase and authenticate the user
       async function initializeFirebase() {
         try {
           app = initializeApp(firebaseConfig);
           db = getFirestore(app);
           auth = getAuth(app);
-
-          // Listen for authentication state changes
           onAuthStateChanged(auth, async user => {
             if (user) {
               userId = user.uid;
               document.getElementById("user-id").textContent = userId;
               console.log("User authenticated:", userId);
-              // Once authenticated, set up the real-time listener for results
               setupResultsListener();
             } else {
-              // If no user is authenticated, try to sign in with custom token or anonymously
-              if (initialAuthToken) {
-                await signInWithCustomToken(auth, initialAuthToken);
-              } else {
-                await signInAnonymously(auth);
-              }
+              await signInAnonymously(auth);
             }
           });
         } catch (error) {
-          console.error(
-            "Error initializing Firebase or authenticating:",
-            error
-          );
+          console.error("Error initializing Firebase:", error);
           showModal("خطا در بارگذاری سرویس‌ها. لطفاً صفحه را رفرش کنید.");
         }
       }
 
-      // Data for the MBI questions (provided by the user)
       const mbiQuestions = [
         {
           id: "MBI_1",
@@ -646,7 +696,7 @@
         }
       ];
 
-      // Data for the YSQ questions (provided by the user)
+      // Data for YSQ questions (full 75-item list)
       const ysqQuestions = [
         {
           id: "YSQ_1",
@@ -1895,16 +1945,112 @@
         }
       ];
 
-      // Function to render Likert scale questions dynamically
-      function renderLikertQuestions(questions, containerId, formName) {
-        const container = document.getElementById(containerId);
-        container.innerHTML = ""; // Clear previous content
+      // Data for the Migration questions
+      const migrationQuestions = [
+        {
+          id: "MIQ_1",
+          question: "آیا در حال حاضر به مهاجرت فکر می‌کنید؟",
+          type: "likert",
+          options: ["اصلاً", "کم", "متوسط", "زیاد", "بسیار زیاد"],
+          scale: [0, 1, 2, 3, 4]
+        },
+        {
+          id: "MIQ_2",
+          question: "چقدر احتمال دارد که در ۵ سال آینده مهاجرت کنید؟",
+          type: "likert",
+          options: ["اصلاً", "کم", "متوسط", "زیاد", "بسیار زیاد"],
+          scale: [0, 1, 2, 3, 4]
+        },
+        {
+          id: "MIQ_3",
+          question: "تا چه حد به دنبال اطلاعات درباره مهاجرت هستید؟",
+          type: "likert",
+          options: ["اصلاً", "کم", "متوسط", "زیاد", "بسیار زیاد"],
+          scale: [0, 1, 2, 3, 4]
+        },
+        {
+          id: "MIQ_4",
+          question: "چقدر از وضعیت فعلی کشور خود ناراضی هستید؟",
+          type: "likert",
+          options: ["اصلاً", "کم", "متوسط", "زیاد", "بسیار زیاد"],
+          scale: [0, 1, 2, 3, 4]
+        },
+        {
+          id: "MIQ_5",
+          question: "چقدر به بهبود شرایط زندگی خود از طریق مهاجرت امیدوارید؟",
+          type: "likert",
+          options: ["اصلاً", "کم", "متوسط", "زیاد", "بسیار زیاد"],
+          scale: [0, 1, 2, 3, 4]
+        },
+        {
+          id: "MIQ_6",
+          question:
+            "آیا تا به حال برای مهاجرت اقدام عملی (مانند ثبت‌نام در آزمون زبان، مشاوره با وکیل) کرده‌اید؟",
+          type: "likert",
+          options: ["خیر", "بله، در حال بررسی", "بله، اقدام کرده‌ام"],
+          scale: [0, 1, 2]
+        },
+        {
+          id: "MIQ_7",
+          question: "مهمترین دلیل شما برای تمایل به مهاجرت چیست؟",
+          type: "likert",
+          options: [
+            "اقتصادی",
+            "اجتماعی",
+            "سیاسی",
+            "تحصیلی",
+            "خانوادگی",
+            "سایر"
+          ],
+          scale: [0, 1, 2, 3, 4, 5]
+        },
+        {
+          id: "MIQ_8",
+          question: "چه کشوری را برای مهاجرت ترجیح می‌دهید؟ (اختیاری)",
+          type: "text"
+        },
+        {
+          id: "MIQ_9",
+          question: "چقدر با زبان کشور مقصد آشنایی دارید؟",
+          type: "likert",
+          options: ["هیچ", "کم", "متوسط", "زیاد", "بسیار زیاد"],
+          scale: [0, 1, 2, 3, 4]
+        },
+        {
+          id: "MIQ_10",
+          question: "آیا خانواده یا دوستان نزدیکی در کشور مقصد دارید؟",
+          type: "likert",
+          options: ["خیر", "بله، دوستان", "بله، خانواده", "بله، هر دو"],
+          scale: [0, 1, 2, 3]
+        },
+        {
+          id: "MIQ_11",
+          question:
+            "چقدر نگران چالش‌های مهاجرت (مانند یافتن شغل، سازگاری فرهنگی) هستید؟",
+          type: "likert",
+          options: ["اصلاً", "کم", "متوسط", "زیاد", "بسیار زیاد"],
+          scale: [0, 1, 2, 3, 4]
+        },
+        {
+          id: "MIQ_12",
+          question: "آیا پس‌انداز کافی برای شروع زندگی در کشور مقصد دارید؟",
+          type: "likert",
+          options: ["خیر", "تا حدی", "بله، کاملاً"],
+          scale: [0, 1, 2]
+        }
+      ];
 
+      function renderQuestions(questions, containerId, formName) {
+        const container = document.getElementById(containerId);
+        container.innerHTML = "";
         questions.forEach((q, index) => {
           const questionDiv = document.createElement("div");
           questionDiv.className =
             "mb-6 p-4 border border-gray-200 rounded-lg bg-white shadow-sm";
-          questionDiv.innerHTML = `
+          let questionContent = "";
+
+          if (q.type === "likert") {
+            questionContent = `
                     <p class="text-lg font-medium text-gray-900 mb-3">${
                       index + 1
                     }. ${q.question}</p>
@@ -1924,26 +2070,36 @@
                           .join("")}
                     </div>
                 `;
+          } else if (q.type === "text") {
+            questionContent = `
+                    <label for="${
+                      q.id
+                    }" class="block text-lg font-medium text-gray-900 mb-3">${
+              index + 1
+            }. ${q.question}</label>
+                    <input type="text" id="${q.id}" data-form-name="${formName}"
+                           class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-lg"
+                           placeholder="پاسخ خود را وارد کنید">
+                `;
+          }
+
+          questionDiv.innerHTML = questionContent;
           container.appendChild(questionDiv);
         });
 
-        // Add event listeners for option selection
         container.querySelectorAll(".likert-option").forEach(button => {
           button.addEventListener("click", event => {
             const parentDiv = event.target.closest(".flex");
             if (parentDiv) {
-              // Remove 'selected' class from all siblings
-              Array.from(parentDiv.children).forEach(btn => {
-                btn.classList.remove("selected");
-              });
-              // Add 'selected' class to the clicked button
+              Array.from(parentDiv.children).forEach(btn =>
+                btn.classList.remove("selected")
+              );
               event.target.classList.add("selected");
             }
           });
         });
       }
 
-      // Function to collect answers from a form section
       function collectFormAnswers(containerId) {
         const container = document.getElementById(containerId);
         const answers = {};
@@ -1956,8 +2112,6 @@
             const selectedOption = questionContainer.querySelector(
               ".likert-option.selected"
             );
-
-            // Remove previous error highlighting
             questionContainer
               .closest(".mb-6")
               .classList.remove("border-red-500", "border-2");
@@ -1966,67 +2120,65 @@
               answers[questionId] = parseInt(selectedOption.dataset.value);
             } else {
               allQuestionsAnswered = false;
-              // Highlight unanswered questions
               questionContainer
                 .closest(".mb-6")
                 .classList.add("border-red-500", "border-2");
             }
           });
+
+        container
+          .querySelectorAll('input[type="text"][data-form-name]')
+          .forEach(input => {
+            const questionId = input.id;
+            answers[questionId] = input.value.trim() || "پاسخ داده نشده";
+          });
+
         return { answers, allQuestionsAnswered };
       }
 
-      // Event listener for the main submit button
       document
         .getElementById("submit-all-forms")
         .addEventListener("click", async () => {
           if (!userId) {
+            showModal("لطفاً منتظر بمانید تا احراز هویت انجام شود.");
+            return;
+          }
+
+          const demographicFields = {
+            age: document.getElementById("age"),
+            gender: document.getElementById("gender"),
+            maritalStatus: document.getElementById("maritalStatus"),
+            childrenCount: document.getElementById("childrenCount"),
+            education: document.getElementById("education"),
+            occupation: document.getElementById("occupation"),
+            incomeLevel: document.getElementById("incomeLevel"),
+            city: document.getElementById("city")
+          };
+
+          let allDemographicsValid = true;
+          Object.values(demographicFields).forEach(field => {
+            field.classList.remove("border-red-500", "border-2");
+            if (!field.value.trim()) {
+              allDemographicsValid = false;
+              field.classList.add("border-red-500", "border-2");
+            }
+          });
+
+          if (!allDemographicsValid) {
             showModal(
-              "لطفاً منتظر بمانید تا احراز هویت انجام شود. اگر مشکل ادامه داشت، صفحه را رفرش کنید."
+              "لطفاً تمام اطلاعات دموگرافیک را پر کنید. موارد ناقص با کادر قرمز مشخص شده‌اند."
             );
             return;
           }
 
-          // Collect demographic data
-          const age = document.getElementById("age").value;
-          const gender = document.getElementById("gender").value;
-          const education = document.getElementById("education").value;
-          const occupation = document.getElementById("occupation").value;
-
-          // Basic validation for demographic fields
-          if (!age || !gender || !education || !occupation) {
-            showModal("لطفاً تمام اطلاعات دموگرافیک را پر کنید.");
-            // Optionally highlight demographic fields
-            document.getElementById("age").classList.add("border-red-500");
-            document.getElementById("gender").classList.add("border-red-500");
-            document
-              .getElementById("education")
-              .classList.add("border-red-500");
-            document
-              .getElementById("occupation")
-              .classList.add("border-red-500");
-            return;
-          } else {
-            // Remove error highlighting if fields are filled
-            document.getElementById("age").classList.remove("border-red-500");
-            document
-              .getElementById("gender")
-              .classList.remove("border-red-500");
-            document
-              .getElementById("education")
-              .classList.remove("border-red-500");
-            document
-              .getElementById("occupation")
-              .classList.remove("border-red-500");
-          }
-
-          // Collect answers from MBI and YSQ forms
           const mbiResults = collectFormAnswers("mbi-form-section");
           const ysqResults = collectFormAnswers("ysq-form-section");
+          const migrationResults = collectFormAnswers("migration-form-section");
 
-          // Check if all questions were answered
           if (
             !mbiResults.allQuestionsAnswered ||
-            !ysqResults.allQuestionsAnswered
+            !ysqResults.allQuestionsAnswered ||
+            !migrationResults.allQuestionsAnswered
           ) {
             showModal(
               "لطفاً به تمام سوالات پاسخ دهید. سوالات پاسخ داده نشده با کادر قرمز مشخص شده‌اند."
@@ -2034,41 +2186,39 @@
             return;
           }
 
-          // Prepare data for submission
           const submissionData = {
             userId: userId,
             demographics: {
-              age: parseInt(age),
-              gender: gender,
-              education: education,
-              occupation: occupation
+              age: parseInt(demographicFields.age.value),
+              gender: demographicFields.gender.value,
+              maritalStatus: demographicFields.maritalStatus.value,
+              childrenCount: parseInt(demographicFields.childrenCount.value),
+              education: demographicFields.education.value,
+              occupation: demographicFields.occupation.value,
+              incomeLevel: demographicFields.incomeLevel.value,
+              city: demographicFields.city.value
             },
             mbiAnswers: mbiResults.answers,
             ysqAnswers: ysqResults.answers,
-            timestamp: serverTimestamp() // Firestore server timestamp for accurate time
+            migrationAnswers: migrationResults.answers,
+            timestamp: serverTimestamp()
           };
 
           try {
-            // Store data in a public collection in Firestore
-            // The document ID is set to the userId, meaning each user can only have one submission
-            // If you want multiple submissions per user, you would use addDoc(submissionsCollectionRef, submissionData);
             const submissionsCollectionRef = collection(
               db,
               `artifacts/${appId}/public/data/formSubmissions`
             );
             await setDoc(doc(submissionsCollectionRef, userId), submissionData);
             showModal("فرم‌ها با موفقیت ارسال شدند!");
-            console.log("Document written with ID: ", userId);
           } catch (e) {
             console.error("Error adding document: ", e);
             showModal("خطا در ارسال فرم‌ها. لطفاً دوباره تلاش کنید.");
           }
         });
 
-      // Function to set up a real-time listener for results from Firestore
       function setupResultsListener() {
         if (!db || !userId) {
-          console.log("Firestore or userId not ready for results listener.");
           return;
         }
 
@@ -2077,13 +2227,12 @@
           db,
           `artifacts/${appId}/public/data/formSubmissions`
         );
-        const q = query(submissionsCollectionRef); // Query to get all submissions
+        const q = query(submissionsCollectionRef);
 
-        // Listen for real-time updates
         onSnapshot(
           q,
           snapshot => {
-            resultsDisplay.innerHTML = ""; // Clear previous results
+            resultsDisplay.innerHTML = "";
             if (snapshot.empty) {
               resultsDisplay.innerHTML =
                 '<p class="text-center text-gray-500">هیچ نتیجه‌ای هنوز ارسال نشده است.</p>';
@@ -2096,42 +2245,64 @@
               resultItem.className =
                 "p-4 border border-gray-300 rounded-lg bg-white shadow-sm mb-4";
               resultItem.innerHTML = `
-                        <p class="font-bold text-lg text-blue-700">شناسه کاربر: ${
-                          data.userId
-                        }</p>
-                        <p class="text-gray-700"><strong>زمان ارسال:</strong> ${
-                          data.timestamp
-                            ? new Date(data.timestamp.toDate()).toLocaleString(
-                                "fa-IR"
-                              )
+                    <p class="font-bold text-lg text-blue-700 break-words">شناسه کاربر: ${
+                      data.userId
+                    }</p>
+                    <p class="text-gray-700"><strong>زمان ارسال:</strong> ${
+                      data.timestamp
+                        ? new Date(data.timestamp.toDate()).toLocaleString(
+                            "fa-IR"
+                          )
+                        : "نامشخص"
+                    }</p>
+                    
+                    <h3 class="font-semibold text-md mt-3 mb-1">اطلاعات دموگرافیک:</h3>
+                    <ul class="list-disc list-inside text-gray-600 space-y-1">
+                        <li>سن: ${data.demographics?.age || "نامشخص"}</li>
+                        <li>جنسیت: ${data.demographics?.gender || "نامشخص"}</li>
+                        <li>وضعیت تأهل: ${
+                          data.demographics?.maritalStatus || "نامشخص"
+                        }</li>
+                        <li>تعداد فرزندان: ${
+                          data.demographics?.childrenCount !== undefined
+                            ? data.demographics.childrenCount
                             : "نامشخص"
-                        }</p>
-                        <h3 class="font-semibold text-md mt-2">اطلاعات دموگرافیک:</h3>
-                        <ul class="list-disc list-inside text-gray-600">
-                            <li>سن: ${data.demographics?.age || "نامشخص"}</li>
-                            <li>جنسیت: ${
-                              data.demographics?.gender || "نامشخص"
-                            }</li>
-                            <li>تحصیلات: ${
-                              data.demographics?.education || "نامشخص"
-                            }</li>
-                            <li>شغل: ${
-                              data.demographics?.occupation || "نامشخص"
-                            }</li>
-                        </ul>
-                        <h3 class="font-semibold text-md mt-2">پاسخ‌های MBI:</h3>
-                        <ul class="list-disc list-inside text-gray-600">
-                            ${Object.entries(data.mbiAnswers || {})
-                              .map(([id, value]) => `<li>${id}: ${value}</li>`)
-                              .join("")}
-                        </ul>
-                        <h3 class="font-semibold text-md mt-2">پاسخ‌های YSQ:</h3>
-                        <ul class="list-disc list-inside text-gray-600">
-                            ${Object.entries(data.ysqAnswers || {})
-                              .map(([id, value]) => `<li>${id}: ${value}</li>`)
-                              .join("")}
-                        </ul>
-                    `;
+                        }</li>
+                        <li>تحصیلات: ${
+                          data.demographics?.education || "نامشخص"
+                        }</li>
+                        <li>شغل: ${
+                          data.demographics?.occupation || "نامشخص"
+                        }</li>
+                        <li>سطح درآمد: ${
+                          data.demographics?.incomeLevel || "نامشخص"
+                        }</li>
+                        <li>شهر محل سکونت: ${
+                          data.demographics?.city || "نامشخص"
+                        }</li>
+                    </ul>
+
+                    <h3 class="font-semibold text-md mt-3 mb-1">پاسخ‌های MBI:</h3>
+                    <ul class="list-disc list-inside text-gray-600 space-y-1 break-words">
+                        ${Object.entries(data.mbiAnswers || {})
+                          .map(([id, value]) => `<li>${id}: ${value}</li>`)
+                          .join("")}
+                    </ul>
+
+                    <h3 class="font-semibold text-md mt-3 mb-1">پاسخ‌های YSQ:</h3>
+                    <ul class="list-disc list-inside text-gray-600 space-y-1 break-words">
+                        ${Object.entries(data.ysqAnswers || {})
+                          .map(([id, value]) => `<li>${id}: ${value}</li>`)
+                          .join("")}
+                    </ul>
+
+                    <h3 class="font-semibold text-md mt-3 mb-1">پاسخ‌های پرسشنامه تمایل به مهاجرت:</h3>
+                    <ul class="list-disc list-inside text-gray-600 space-y-1 break-words">
+                        ${Object.entries(data.migrationAnswers || {})
+                          .map(([id, value]) => `<li>${id}: ${value}</li>`)
+                          .join("")}
+                    </ul>
+                `;
               resultsDisplay.appendChild(resultItem);
             });
           },
@@ -2142,10 +2313,14 @@
         );
       }
 
-      // Initial rendering of forms and Firebase initialization when the window loads
       window.onload = () => {
-        renderLikertQuestions(mbiQuestions, "mbi-form-section", "MBI");
-        renderLikertQuestions(ysqQuestions, "ysq-form-section", "YSQ");
+        renderQuestions(mbiQuestions, "mbi-form-section", "MBI");
+        renderQuestions(ysqQuestions, "ysq-form-section", "YSQ");
+        renderQuestions(
+          migrationQuestions,
+          "migration-form-section",
+          "Migration"
+        );
         initializeFirebase();
       };
     </script>
